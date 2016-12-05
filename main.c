@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef struct punto{
@@ -27,13 +28,10 @@ int main(int argc, char *argv[]){
 		case 10: strcpy(order_type, "order_types/otypes10.b16"); types = 14309547; break;
 	}
 
-
-	//printf("archivo a abrir: %s\n", order_type);
-	//FILE *file = fopen("crossing_families/crossf03.b08", "r");
 	FILE *file = fopen(order_type, "r");
 	unsigned char a, b;
-	//Punto order_types[types][n];
-	Punto order_types[types*n];
+
+	Punto *order_types = (Punto*)malloc(sizeof(Punto)*types*n);
 
 
 	if(file == NULL){
@@ -41,28 +39,19 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
-	for(i = 0; i < types*n; i++){
-		order_types[i].x = 999;
-		order_types[i].y = 999;
-	}
 	i = 0;
-
 	while(!feof(file)){
 
-		fscanf(file, "%c ", &a);
-		fscanf(file, "%c ", &b);
+		fscanf(file, "%c", &a);
+		fscanf(file, "%c", &b);
 
 		order_types[i].x = (uint16_t)a;
 		order_types[i].y = (uint16_t)b;
 
 		i++;
 
-		/*
-		printf("%d ", a);
+		if(i == types*n) break;
 
-		if(c % (n*2) == 0) printf("\n");
-		c++;
-		*/	
 	}
 
 	for(i = 0, c = 1; i < types*n; i++, c++){
