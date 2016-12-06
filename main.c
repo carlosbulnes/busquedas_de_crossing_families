@@ -40,32 +40,18 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
-
 	i = 0;
 	while(!feof(file)){
 
-		//fscanf(file, "%d", &a);
-		//fscanf(file, "%d", &b);
 		fread(&a, bytes, 1, file);
 		fread(&b, bytes, 1, file);
-
-		//if(n != 10)
-		//printf("(%X, %X)\n", a, b);
 
 		order_types[i].x = a;
 		order_types[i].y = b;
 
 		i++;
-
-		//if(i == types*n) break;
-
 	}
 
-/*
-	printf("i: %d\n", i-1);
-	i--;
-	i--;*/
-//return 0;
 	for(i = 0, c = 1; i < types*n; i++, c++){
 		printf("(%d, %d), ", order_types[i].x, order_types[i].y);
 
