@@ -14,10 +14,17 @@ typedef struct segmento{
 }Segmento;
 
 
+int vertices_iguales(Punto p1, Punto p2){
+	if(p1.x == p2.x && p1.y == p2.y)
+		return 1;
+
+	return 0;
+}
+
 int main(int argc, char *argv[]){
 	
 	int n, otypes, c = 1, i, j, k, bytes, nsegmentos;
-	int inicio, final, npuntos;
+	int inicio, npuntos;
 	char order_type[50];
 
 
@@ -60,11 +67,10 @@ int main(int argc, char *argv[]){
 		i++;
 	}
 
-
 	for(inicio = 0; inicio < npuntos; inicio+=n){
 		// Construye los n en 2 segmentos
 		for(i = inicio, k = 0; i < (inicio+n); i++){
-			for(j = i+1; j < n; j++){
+			for(j = i+1; j < (inicio+n); j++){
 				segmentos[k].a = puntos[i];
 				segmentos[k].b = puntos[j];
 				k++;
@@ -80,7 +86,7 @@ int main(int argc, char *argv[]){
 
 	}
 
-	return 0;
+	if(n > 8) return 0;
 
 	for(i = 0, c = 1; i < npuntos; i++, c++){
 		printf("(%d, %d), ", puntos[i].x, puntos[i].y);

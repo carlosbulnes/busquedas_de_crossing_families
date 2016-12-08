@@ -1,0 +1,8 @@
+You are using pip version 8.1.2, however version 9.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+(create_ap-gui:3479): Gtk-WARNING **: Allocating size to createApGui+mainWindow+MainWindow 0x2308260 without calling gtk_widget_get_preferred_width/height(). How does the code know the size to allocate?
+You are using pip version 8.1.2, however version 9.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+(create_ap-gui:2282): Gtk-WARNING **: Allocating size to createApGui+mainWindow+MainWindow 0x22a8260 without calling gtk_widget_get_preferred_width/height(). How does the code know the size to allocate?
