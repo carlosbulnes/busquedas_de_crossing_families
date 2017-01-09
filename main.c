@@ -13,6 +13,14 @@ typedef struct segmento{
 	struct punto b;
 }Segmento;
 
+int puntos_iguales(Punto a, Punto b){
+	return a.x == b.x && a.y == b.y;
+}
+
+int es_colineal(Segmento s1, Segmento s2){
+	return puntos_iguales(s1.a, s2.a) || puntos_iguales(s1.a, s2.b) || puntos_iguales(s1.b, s2.a) || puntos_iguales(s1.b, s2.b);
+}
+
 
 int vertices_iguales(Punto p1, Punto p2){
 	if(p1.x == p2.x && p1.y == p2.y)
@@ -23,10 +31,9 @@ int vertices_iguales(Punto p1, Punto p2){
 
 int main(int argc, char *argv[]){
 	
-	int n, otypes, c = 1, i, j, k, bytes, nsegmentos;
-	int inicio, npuntos;
+	int n, otypes, c = 1, i, j, k, bytes, nsegmentos, bandera = 0;
+	int inicio, final, npuntos;
 	char order_type[50];
-
 
 	printf("Selecciona el valor de n entre 3 y 10: ");
 	scanf("%d", &n);
@@ -48,6 +55,7 @@ int main(int argc, char *argv[]){
 
 	Punto *puntos = (Punto*)malloc(sizeof(Punto)*npuntos);
 	Segmento *segmentos = (Segmento*)malloc(sizeof(Segmento)*nsegmentos);
+	Segmento segmentos_rojos[2], segmentos_azules[2];
 
 
 	if(file == NULL){
@@ -67,6 +75,7 @@ int main(int argc, char *argv[]){
 		i++;
 	}
 
+	// Recorre los order types
 	for(inicio = 0; inicio < npuntos; inicio+=n){
 		// Construye los n en 2 segmentos
 		for(i = inicio, k = 0; i < (inicio+n); i++){
@@ -74,28 +83,57 @@ int main(int argc, char *argv[]){
 				segmentos[k].a = puntos[i];
 				segmentos[k].b = puntos[j];
 				k++;
+			}	
+		}
+
+		for(i = 0; i < nsegmentos; i++){
+			segmentos_rojos[0] = segmentos[i];
+
+			// Busca la pareja del segmento rojo
+			bandera = 0;
+			for(j = 0; j < nsegmentos; j++){
+				if(!es_colineal(segmentos_rojos[0],segmentos[j])){
+					segmentos_rojos[1] = segmentos[j];
+					bandera = 1;
+					break;
+				}
 			}
+
+			if(bandera)
+				printf("|(%d, %d), (%d, %d)| y |(%d, %d), (%d, %d)| elegidos\n", segmentos_rojos[0].a.x, segmentos_rojos[0].a.y, segmentos_rojos[0].b.x, segmentos_rojos[0].b.y, segmentos_rojos[1].a.x, segmentos_rojos[1].a.y, segmentos_rojos[1].b.x, segmentos_rojos[1].b.y);
+			else
+				printf("No se encontro pareja\n");
 		}
 
 
+		/*
+		// Verifica si los segmentos son o no colineales
+		for(i = 0; i < nsegmentos-1; i++){
+			if(es_colineal(segmentos[i], segmentos[i+1])){
+				printf("|(%d, %d), (%d, %d)| y |(%d, %d), (%d, %d)| son colineales\n", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y, segmentos[i+1].a.x, segmentos[i+1].a.y, segmentos[i+1].b.x, segmentos[i+1].b.y);
+			}else{
+				printf("|(%d, %d), (%d, %d)| y |(%d, %d), (%d, %d)| no son colineales\n", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y, segmentos[i+1].a.x, segmentos[i+1].a.y, segmentos[i+1].b.x, segmentos[i+1].b.y);
+			}
+		}			
+		
 		printf("Los n en 2 segmentos del order type %d son: \n", (inicio/n)+1);
 		for(i = 0; i < nsegmentos; i++){
 			printf("|(%d, %d), (%d, %d)|, ", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y);
 		}
 		printf("\n\n");
-
+		*/
 	}
 
-	if(n > 8) return 0;
+	//if(n > 8) return 0;
 
+	/*
+	// Imprime los order types
 	for(i = 0, c = 1; i < npuntos; i++, c++){
 		printf("(%d, %d), ", puntos[i].x, puntos[i].y);
 
 		if(c % n == 0) printf("\n");
 	}
-
-
 	printf("\n");
-
+	*/
 	return 0;
 }
