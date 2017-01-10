@@ -4,11 +4,13 @@
 #include <string.h>
 
 typedef struct punto{
+	char etiqueta;
 	uint16_t x;
 	uint16_t y;
 }Punto;
 
 typedef struct segmento{
+	char etiqueta[3];
 	struct punto a;
 	struct punto b;
 }Segmento;
@@ -17,24 +19,34 @@ int puntos_iguales(Punto a, Punto b){
 	return a.x == b.x && a.y == b.y;
 }
 
-int es_colineal(Segmento s1, Segmento s2){
+int comparten_punto(Segmento s1, Segmento s2){
 	return puntos_iguales(s1.a, s2.a) || puntos_iguales(s1.a, s2.b) || puntos_iguales(s1.b, s2.a) || puntos_iguales(s1.b, s2.b);
 }
 
+int area(Punto a, Punto b, Punto c){
+	return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+}
 
-int vertices_iguales(Punto p1, Punto p2){
-	if(p1.x == p2.x && p1.y == p2.y)
-		return 1;
+int izquierda(Punto a, Punto b, Punto c){
+	return area(a, b, c) > 0;
+}
 
-	return 0;
+int Xor(int x, int y){
+	return !x ^ !y;
+}
+
+int interseccion(Segmento s1, Segmento s2){
+	Punto a = s1.a, b = s1.b, c = s2.a, d = s2.b;
+	
+	return Xor(izquierda(a, b, c), izquierda(a, b, d)) && Xor(izquierda(c,d,a), izquierda(c,d,b));
 }
 
 int main(int argc, char *argv[]){
 	
-	int n, otypes, c = 1, i, j, k, bytes, nsegmentos, bandera = 0;
-	int inicio, final, npuntos;
-	char order_type[50];
+	int n, otypes, c = 1, i, j, k, l, m, bytes, nsegmentos, npuntos;
+	char order_type[50], etiqueta;
 
+	system("clear");
 	printf("Selecciona el valor de n entre 3 y 10: ");
 	scanf("%d", &n);
 
@@ -55,7 +67,7 @@ int main(int argc, char *argv[]){
 
 	Punto *puntos = (Punto*)malloc(sizeof(Punto)*npuntos);
 	Segmento *segmentos = (Segmento*)malloc(sizeof(Segmento)*nsegmentos);
-	Segmento segmentos_rojos[2], segmentos_azules[2];
+	Segmento srojos[2], sazules[2];
 
 
 	if(file == NULL){
@@ -64,58 +76,93 @@ int main(int argc, char *argv[]){
 	}
 
 	i = 0;
+	etiqueta = 'a';
 	while(!feof(file)){
 
 		fread(&a, bytes, 1, file);
 		fread(&b, bytes, 1, file);
 
+		puntos[i].etiqueta = etiqueta;
 		puntos[i].x = a;
 		puntos[i].y = b;
 
+		etiqueta += 1;
 		i++;
+		if(i % n == 0) etiqueta = 'a';
 	}
 
 	// Recorre los order types
-	for(inicio = 0; inicio < npuntos; inicio+=n){
-		// Construye los n en 2 segmentos
-		for(i = inicio, k = 0; i < (inicio+n); i++){
-			for(j = i+1; j < (inicio+n); j++){
+	for(l = 0; l < npuntos; l+=n){
+		// Construye los n en 2 segmentos para el l order type
+		for(i = l, k = 0; i < (l+n); i++){
+			for(j = i+1; j < (l+n); j++){
 				segmentos[k].a = puntos[i];
 				segmentos[k].b = puntos[j];
+				segmentos[k].etiqueta[0] = puntos[i].etiqueta;
+				segmentos[k].etiqueta[1] = puntos[j].etiqueta;
 				k++;
 			}	
 		}
 
-		for(i = 0; i < nsegmentos; i++){
-			segmentos_rojos[0] = segmentos[i];
+		// Imprime los puntos del order type
+		printf("--------------------otype %d-----------------------\n", (l/n)+1);
+		for(i = l; i < (l+n); i++){
+			printf("%c: (%d, %d) ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);	
+		}
+		printf("\n");
 
+		//printf("--------------------otype %d-----------------------\n", (l/n)+1);
+		for(i = 0; i < nsegmentos; i++){
+			srojos[0] = segmentos[i];
+			
 			// Busca la pareja del segmento rojo
-			bandera = 0;
-			for(j = 0; j < nsegmentos; j++){
-				if(!es_colineal(segmentos_rojos[0],segmentos[j])){
-					segmentos_rojos[1] = segmentos[j];
-					bandera = 1;
-					break;
+			for(j = i; j < nsegmentos; j++){
+				if(!comparten_punto(srojos[0],segmentos[j])){
+					// Encuentra la pareja roja
+					srojos[1] = segmentos[j];
+
+					// Busca los segmentos azules
+					for(k = 0; k < nsegmentos; k++){
+						if(strcmp(segmentos[k].etiqueta, srojos[0].etiqueta) == 0 || strcmp(segmentos[k].etiqueta, srojos[1].etiqueta) == 0
+							|| comparten_punto(segmentos[k], srojos[0]) || comparten_punto(segmentos[k], srojos[1])){
+							continue;
+						}
+						
+						// Determina el primer segmento azul
+						sazules[0] = segmentos[k];
+						
+						// Busca pareja del segmento azul
+						for(m = k; m < nsegmentos; m++){
+							if(!comparten_punto(sazules[0], segmentos[m]) && !comparten_punto(segmentos[m], srojos[0]) && !comparten_punto(segmentos[m], srojos[1])
+								&& strcmp(segmentos[m].etiqueta, srojos[0].etiqueta) != 0 && strcmp(segmentos[m].etiqueta, srojos[1].etiqueta) != 0){
+								// Pareja azul encontrada
+								sazules[1] = segmentos[m];
+
+								if(interseccion(srojos[0], sazules[0]) || interseccion(srojos[0], sazules[1])
+									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
+									printf("Se encontro una crossing family\n");
+
+									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
+									
+									printf("Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
+									break;
+								}
+								else{
+									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
+									
+									printf("Azules: %s y %s no son CF\n", sazules[0].etiqueta, sazules[1].etiqueta);
+									break;
+								}
+							}
+						}
+					}
 				}
 			}
-
-			if(bandera)
-				printf("|(%d, %d), (%d, %d)| y |(%d, %d), (%d, %d)| elegidos\n", segmentos_rojos[0].a.x, segmentos_rojos[0].a.y, segmentos_rojos[0].b.x, segmentos_rojos[0].b.y, segmentos_rojos[1].a.x, segmentos_rojos[1].a.y, segmentos_rojos[1].b.x, segmentos_rojos[1].b.y);
-			else
-				printf("No se encontro pareja\n");
+			break;
 		}
-
-
-		/*
-		// Verifica si los segmentos son o no colineales
-		for(i = 0; i < nsegmentos-1; i++){
-			if(es_colineal(segmentos[i], segmentos[i+1])){
-				printf("|(%d, %d), (%d, %d)| y |(%d, %d), (%d, %d)| son colineales\n", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y, segmentos[i+1].a.x, segmentos[i+1].a.y, segmentos[i+1].b.x, segmentos[i+1].b.y);
-			}else{
-				printf("|(%d, %d), (%d, %d)| y |(%d, %d), (%d, %d)| no son colineales\n", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y, segmentos[i+1].a.x, segmentos[i+1].a.y, segmentos[i+1].b.x, segmentos[i+1].b.y);
-			}
-		}			
+		//printf("----------------------------------------------------\n");
 		
+		/*			
 		printf("Los n en 2 segmentos del order type %d son: \n", (inicio/n)+1);
 		for(i = 0; i < nsegmentos; i++){
 			printf("|(%d, %d), (%d, %d)|, ", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y);
@@ -124,12 +171,10 @@ int main(int argc, char *argv[]){
 		*/
 	}
 
-	//if(n > 8) return 0;
-
 	/*
 	// Imprime los order types
 	for(i = 0, c = 1; i < npuntos; i++, c++){
-		printf("(%d, %d), ", puntos[i].x, puntos[i].y);
+		printf("%c: (%d, %d), ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);
 
 		if(c % n == 0) printf("\n");
 	}
