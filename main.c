@@ -44,6 +44,7 @@ int interseccion(Segmento s1, Segmento s2){
 int main(int argc, char *argv[]){
 	
 	int n, otypes, c = 1, i, j, k, l, m, bytes, nsegmentos, npuntos;
+	int ncrossings = 0, siempre_existe = 1, bandera;
 	char order_type[50], etiqueta;
 
 	system("clear");
@@ -104,13 +105,16 @@ int main(int argc, char *argv[]){
 			}	
 		}
 
+		bandera = 0;
+
+		/*
 		// Imprime los puntos del order type
 		printf("--------------------otype %d-----------------------\n", (l/n)+1);
 		for(i = l; i < (l+n); i++){
 			printf("%c: (%d, %d) ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);	
 		}
 		printf("\n");
-
+		*/
 		//printf("--------------------otype %d-----------------------\n", (l/n)+1);
 		for(i = 0; i < nsegmentos; i++){
 			srojos[0] = segmentos[i];
@@ -140,26 +144,32 @@ int main(int argc, char *argv[]){
 
 								if(interseccion(srojos[0], sazules[0]) || interseccion(srojos[0], sazules[1])
 									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
-									printf("Se encontro una crossing family\n");
-
-									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									
-									printf("Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
-									break;
+									ncrossings++;
+									bandera = 1;
+									//printf("Se encontro una crossing family\n");
+
+									//printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
+									
+									//printf("Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
+									//break;
 								}
-								else{
+								/*else{
 									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									
 									printf("Azules: %s y %s no son CF\n", sazules[0].etiqueta, sazules[1].etiqueta);
 									break;
-								}
+								}*/
 							}
 						}
 					}
 				}
 			}
-			break;
 		}
+
+		if(bandera == 0)
+			siempre_existe = 0;
+		//siempre_existe = siempre_existe && bandera;
 		//printf("----------------------------------------------------\n");
 		
 		/*			
@@ -180,5 +190,12 @@ int main(int argc, char *argv[]){
 	}
 	printf("\n");
 	*/
+
+	printf("Total de Crossing Families: %d\n", ncrossings);
+	if(siempre_existe)
+		printf("Siempre existe una Crossing Families con n = %d\n", n);
+	else
+		printf("no existe siempre una Crossing Families con n = %d\n", n);
+
 	return 0;
 }
