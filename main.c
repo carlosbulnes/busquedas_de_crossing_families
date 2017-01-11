@@ -47,9 +47,10 @@ int main(int argc, char *argv[]){
 	int ncrossings = 0, siempre_existe = 1, bandera;
 	char order_type[50], etiqueta;
 
-	system("clear");
-	printf("Selecciona el valor de n entre 3 y 10: ");
-	scanf("%d", &n);
+	//system("clear");
+	//printf("Selecciona el valor de n entre 3 y 10: ");
+	//scanf("%d", &n);
+	n = atoi(argv[1]);
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
@@ -191,7 +192,7 @@ int main(int argc, char *argv[]){
 	printf("\n");
 	*/
 
-	printf("Total de Crossing Families: %d\n", ncrossings);
+	printf("\nTotal de Crossing Families: %d\n", ncrossings);
 	if(siempre_existe)
 		printf("Siempre existe una Crossing Families con n = %d\n", n);
 	else
