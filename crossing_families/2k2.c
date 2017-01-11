@@ -50,6 +50,11 @@ int main(int argc, char *argv[]){
 	//system("clear");
 	//printf("Selecciona el valor de n entre 3 y 10: ");
 	//scanf("%d", &n);
+	if(argc < 2){
+		printf("Se necesita el valor de n como argumento\n");
+		return -1;
+	}
+	
 	n = atoi(argv[1]);
 
 	switch(n){
@@ -143,6 +148,7 @@ int main(int argc, char *argv[]){
 								// Pareja azul encontrada
 								sazules[1] = segmentos[m];
 
+								// Verifica si algun segmento rojo intersecta a algun segmento azul
 								if(interseccion(srojos[0], sazules[0]) || interseccion(srojos[0], sazules[1])
 									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
 									
