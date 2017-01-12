@@ -44,7 +44,7 @@ int interseccion(Segmento s1, Segmento s2){
 int main(int argc, char *argv[]){
 	
 	int n, otypes, c = 1, i, j, k, l, m, bytes, nsegmentos, npuntos;
-	int ncrossings = 0, siempre_existe = 1, bandera;
+	int crossings = 0, ncrossings = 0, siempre_existe = 1, bandera;
 	char order_type[50], etiqueta;
 
 	//system("clear");
@@ -112,6 +112,7 @@ int main(int argc, char *argv[]){
 		}
 
 		bandera = 0;
+		crossings = 0;
 
 		/*
 		// Imprime los puntos del order type
@@ -152,7 +153,7 @@ int main(int argc, char *argv[]){
 								if(interseccion(srojos[0], sazules[0]) || interseccion(srojos[0], sazules[1])
 									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
 									
-									ncrossings++;
+									crossings++;
 									bandera = 1;
 									//printf("Se encontro una crossing family\n");
 
@@ -174,9 +175,9 @@ int main(int argc, char *argv[]){
 			}
 		}
 
-		if(bandera == 0)
-			siempre_existe = 0;
-		//siempre_existe = siempre_existe && bandera;
+		ncrossings += crossings;
+		printf("%d/%d: %d\n", (l/n)+1, otypes, crossings);
+		siempre_existe &= bandera;
 		//printf("----------------------------------------------------\n");
 		
 		/*			
