@@ -69,6 +69,9 @@ int main(int argc, char *argv[]){
 	}
 
 	FILE *file = fopen(order_type, "rb");
+	strcpy(order_type, "crossing_families/log2k2-");
+	strcat(order_type, argv[1]);
+	FILE *log = fopen(order_type, "w");
 	uint16_t a, b;
 	npuntos = otypes*n;
 
@@ -176,7 +179,8 @@ int main(int argc, char *argv[]){
 		}
 
 		ncrossings += crossings;
-		printf("%d/%d: %d\n", (l/n)+1, otypes, crossings);
+		fprintf(log, "%d: %d\n", (l/n)+1, crossings);
+		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		siempre_existe &= bandera;
 		//printf("----------------------------------------------------\n");
 		
