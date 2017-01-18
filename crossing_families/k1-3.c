@@ -70,6 +70,14 @@ int main(int argc, char *argv[]){
 
 	// Recorre los order types
 	for(l = 0; l < npuntos; l+=n){
+
+		/*
+		printf("otype %d:", (l/n)+1);
+		for(i = l; i < (l+n); i++){
+			printf("%c: (%d, %d) ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);	
+		}
+		printf("\n");
+		*/
 		
 		// Recorre los n puntos del order type
 		for(i = 0, nk1_3 = 0; i < n; i++){
@@ -110,8 +118,6 @@ int main(int argc, char *argv[]){
 
 						nk1_3++;
 
-						//fprintf(log, "k1_3: %s %s %s\n", k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta);
-
 						// Selecciona el apice del segundo k1.3
 						for(o = 0; o < n; o++){
 							if(puntos_iguales(puntos[l+o], apice) || puntos_iguales(puntos[l+o], k1_3.s1.b)
@@ -138,7 +144,7 @@ int main(int argc, char *argv[]){
 
 									fprintf(log, "se encontro una CF con k1_3: %s %s %s y segmento %s en otype %d\n",
 										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, segmento.etiqueta, (l/n)+1);
-									//printf("%c%c\n", puntos[l+o].etiqueta, puntos[l+p].etiqueta);
+
 									if(puntos_iguales(segmento.a, apice) || puntos_iguales(segmento.a, k1_3.s1.b)
 										|| puntos_iguales(segmento.a, k1_3.s2.b) || puntos_iguales(segmento.a, k1_3.s3.b)
 										|| puntos_iguales(segmento.b, apice) || puntos_iguales(segmento.b, k1_3.s1.b)
