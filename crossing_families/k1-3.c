@@ -138,7 +138,7 @@ int main(int argc, char *argv[]){
 
 									printf("se encontro una CF con k1_3: %s %s %s y segmento %s en otype %d\n",
 										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, segmento.etiqueta, (l/n)+1);
-									
+									printf("%c%c\n", puntos[0].etiqueta, puntos[p].etiqueta);
 									if(puntos_iguales(segmento.a, apice) || puntos_iguales(segmento.a, k1_3.s1.b)
 										|| puntos_iguales(segmento.a, k1_3.s2.b) || puntos_iguales(segmento.a, k1_3.s3.b)
 										|| puntos_iguales(segmento.b, apice) || puntos_iguales(segmento.b, k1_3.s1.b)
