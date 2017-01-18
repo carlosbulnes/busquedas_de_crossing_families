@@ -110,35 +110,35 @@ int main(int argc, char *argv[]){
 
 						nk1_3++;
 
-						fprintf(log, "k1_3: %s %s %s\n", k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta);
+						//fprintf(log, "k1_3: %s %s %s\n", k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta);
 
 						// Selecciona el apice del segundo k1.3
 						for(o = 0; o < n; o++){
-							if(puntos_iguales(puntos[o], apice) || puntos_iguales(puntos[o], k1_3.s1.b)
-								|| puntos_iguales(puntos[o], k1_3.s2.b) || puntos_iguales(puntos[o], k1_3.s3.b))
+							if(puntos_iguales(puntos[l+o], apice) || puntos_iguales(puntos[l+o], k1_3.s1.b)
+								|| puntos_iguales(puntos[l+o], k1_3.s2.b) || puntos_iguales(puntos[l+o], k1_3.s3.b))
 								continue;
 
-							apice2 = puntos[o];
+							apice2 = puntos[l+o];
 							segmento.etiqueta[0] = apice2.etiqueta;
 							segmento.a = apice2;
 
 							for(p = 0; p < n; p++){
-								if(puntos_iguales(puntos[p], apice) || puntos_iguales(puntos[p], k1_3.s1.b)
-									|| puntos_iguales(puntos[p], k1_3.s2.b) || puntos_iguales(puntos[p], k1_3.s3.b)
-									|| puntos_iguales(puntos[p], apice2))
+								if(puntos_iguales(puntos[l+p], apice) || puntos_iguales(puntos[l+p], k1_3.s1.b)
+									|| puntos_iguales(puntos[l+p], k1_3.s2.b) || puntos_iguales(puntos[l+p], k1_3.s3.b)
+									|| puntos_iguales(puntos[l+p], apice2))
 									continue;
 
-								segmento.etiqueta[1] = puntos[p].etiqueta;
+								segmento.etiqueta[1] = puntos[l+p].etiqueta;
 								segmento.etiqueta[2] = '\0';
-								segmento.b = puntos[p];
+								segmento.b = puntos[l+p];
 
 								if(interseccion(k1_3.s1, segmento) || interseccion(k1_3.s2, segmento)
 									|| interseccion(k1_3.s3, segmento)){
 								
 
-									printf("se encontro una CF con k1_3: %s %s %s y segmento %s en otype %d\n",
+									fprintf(log, "se encontro una CF con k1_3: %s %s %s y segmento %s en otype %d\n",
 										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, segmento.etiqueta, (l/n)+1);
-									printf("%c%c\n", puntos[0].etiqueta, puntos[p].etiqueta);
+									//printf("%c%c\n", puntos[l+o].etiqueta, puntos[l+p].etiqueta);
 									if(puntos_iguales(segmento.a, apice) || puntos_iguales(segmento.a, k1_3.s1.b)
 										|| puntos_iguales(segmento.a, k1_3.s2.b) || puntos_iguales(segmento.a, k1_3.s3.b)
 										|| puntos_iguales(segmento.b, apice) || puntos_iguales(segmento.b, k1_3.s1.b)
