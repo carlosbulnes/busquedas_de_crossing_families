@@ -11,7 +11,7 @@ typedef struct k13{
 
 
 int main(int argc, char *argv[]){
-	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3;
+	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3, notypes;
 	char order_type[50], etiqueta;
 	Punto apice, apice2;
 	K1_3 k1_3;
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]){
 		*/
 		
 		// Recorre los n puntos del order type
-		for(i = 0, nk1_3 = 0; i < n; i++){
+		for(i = 0, nk1_3 = 0, notypes = 0; i < n; i++){
 			// Designa al punto i como el apice
 			apice = puntos[l+i];
 
@@ -141,15 +141,15 @@ int main(int argc, char *argv[]){
 								if(interseccion(k1_3.s1, segmento) || interseccion(k1_3.s2, segmento)
 									|| interseccion(k1_3.s3, segmento)){
 								
-
+									notypes++;
 									fprintf(log, "se encontro una CF con k1_3: %s %s %s y segmento %s en otype %d\n",
 										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, segmento.etiqueta, (l/n)+1);
 
-									if(puntos_iguales(segmento.a, apice) || puntos_iguales(segmento.a, k1_3.s1.b)
+									/*if(puntos_iguales(segmento.a, apice) || puntos_iguales(segmento.a, k1_3.s1.b)
 										|| puntos_iguales(segmento.a, k1_3.s2.b) || puntos_iguales(segmento.a, k1_3.s3.b)
 										|| puntos_iguales(segmento.b, apice) || puntos_iguales(segmento.b, k1_3.s1.b)
 										|| puntos_iguales(segmento.b, k1_3.s2.b) || puntos_iguales(segmento.b, k1_3.s3.b))
-										return 0;						
+										return 0;	*/					
 								}
 
 							}
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]){
 
 			}
 		}
-		fprintf(log, "Total k1_3: %d con n = %d\n", nk1_3, n);
+		fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, notypes, (l/n)+1);
 		//return 0;
 	}
 	return 0;
