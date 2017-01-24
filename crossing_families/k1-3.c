@@ -11,7 +11,7 @@ typedef struct k13{
 
 
 int main(int argc, char *argv[]){
-	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3, notypes;
+	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3, notypes, intersecciones, ncrossings;
 	char order_type[50], etiqueta;
 	Punto apice, apice2;
 	K1_3 k1_3;
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]){
 		*/
 		
 		// Recorre los n puntos del order type
-		for(i = 0, nk1_3 = 0, notypes = 0; i < n; i++){
+		for(i = 0, nk1_3 = 0, ncrossings = 0, notypes = 0; i < n; i++){
 			// Designa al punto i como el apice
 			apice = puntos[l+i];
 
@@ -128,7 +128,8 @@ int main(int argc, char *argv[]){
 							segmento.etiqueta[0] = apice2.etiqueta;
 							segmento.a = apice2;
 
-							for(p = 0; p < n; p++){
+							// Fijado el apice busca crea los segmentos que parten de el con el resto de los puntos
+							for(p = 0, intersecciones = 0; p < n; p++){
 								if(puntos_iguales(puntos[l+p], apice) || puntos_iguales(puntos[l+p], k1_3.s1.b)
 									|| puntos_iguales(puntos[l+p], k1_3.s2.b) || puntos_iguales(puntos[l+p], k1_3.s3.b)
 									|| puntos_iguales(puntos[l+p], apice2))
@@ -141,18 +142,16 @@ int main(int argc, char *argv[]){
 								if(interseccion(k1_3.s1, segmento) || interseccion(k1_3.s2, segmento)
 									|| interseccion(k1_3.s3, segmento)){
 								
-									notypes++;
-									fprintf(log, "se encontro una CF con k1_3: %s %s %s y segmento %s en otype %d\n",
-										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, segmento.etiqueta, (l/n)+1);
-
-									/*if(puntos_iguales(segmento.a, apice) || puntos_iguales(segmento.a, k1_3.s1.b)
-										|| puntos_iguales(segmento.a, k1_3.s2.b) || puntos_iguales(segmento.a, k1_3.s3.b)
-										|| puntos_iguales(segmento.b, apice) || puntos_iguales(segmento.b, k1_3.s1.b)
-										|| puntos_iguales(segmento.b, k1_3.s2.b) || puntos_iguales(segmento.b, k1_3.s3.b))
-										return 0;	*/					
+									//notypes++;
+									//fprintf(log, "se encontro una CF con k1_3: %s %s %s y apice %c en otype %d\n",
+									//	k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta, (l/n)+1);
+									intersecciones++;			
 								}
 
 							}
+							// Se cuenta cuantos segmentos intersectaron a la k13 y apice o
+							printf("%d segmentos intersectaron al k1-3 %s %s %s con apice2 %c\n", intersecciones, k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta);
+							if(n == 8 && intersecciones > 0) ncrossings++;
 							//fprintf(log, "se selecciono %c como apice2\n", apice2.etiqueta);
 						}
 					}
@@ -160,7 +159,7 @@ int main(int argc, char *argv[]){
 
 			}
 		}
-		fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, notypes, (l/n)+1);
+		fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
 		//return 0;
 	}
 	return 0;
