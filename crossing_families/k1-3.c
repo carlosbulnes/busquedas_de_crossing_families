@@ -150,8 +150,33 @@ int main(int argc, char *argv[]){
 
 							}
 							// Se cuenta cuantos segmentos intersectaron a la k13 y apice o
-							printf("%d segmentos intersectaron al k1-3 %s %s %s con apice2 %c\n", intersecciones, k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta);
-							if(n == 8 && intersecciones > 0) ncrossings++;
+							//printf("%d segmentos intersectaron al k1-3 %s %s %s con apice2 %c\n", intersecciones, k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta);
+							
+							switch(n){
+								case 8:
+									if(intersecciones > 0) ncrossings++;
+									break;
+								case 9:
+									if(intersecciones == 1) ncrossings+=3;
+									else if(intersecciones >= 2) ncrossings+=4;
+									break;
+								case 10:
+									if(intersecciones == 1) ncrossings+=6;
+									else if(intersecciones == 2) ncrossings+=9;
+									else if(intersecciones >= 3) ncrossings+= 10;
+									break;
+							}
+							/*
+							if(n == 8 && intersecciones > 0){
+								ncrossings++;
+							}
+							else if(n == 9){
+								if(intersecciones == 1) ncrossings+=3;
+								else if(intersecciones >= 2) ncrossings+=4;
+								//else if(intersecciones >= 3) ncrossings+=10;
+							}
+							else if(n == 10)
+							*/
 							//fprintf(log, "se selecciono %c como apice2\n", apice2.etiqueta);
 						}
 					}
@@ -159,7 +184,10 @@ int main(int argc, char *argv[]){
 
 			}
 		}
-		fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
+		//fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
+		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
+		if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
+		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		//return 0;
 	}
 	return 0;
