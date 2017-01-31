@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "geom.h"
 
 
 int main(int argc, char *argv[]){
 	
-	int n, otypes, c = 1, i, j, k, l, m, bytes, nsegmentos, npuntos;
+	int n, otypes, c = 1, i, j, k, l, m, bytes, nsegmentos, npuntos, inicio, kotypes;
 	int crossings = 0, ncrossings = 0, siempre_existe = 1, bandera;
 	char order_type[50], etiqueta;
 
@@ -64,8 +65,14 @@ int main(int argc, char *argv[]){
 		if(i % n == 0) etiqueta = 'a';
 	}
 
+	printf("otype de inicio: "); scanf("%d", &inicio);
+	printf("otypes a procesar: "); scanf("%d", &kotypes);
+
+	l = (inicio - 1) * n;
+	npuntos = (kotypes == 0) ? npuntos : (l + (kotypes * n));
+	printf("iniciando desde otype: %d\n", (l/n)+1); //return 0; 
 	// Recorre los order types
-	for(l = 0; l < npuntos; l+=n){
+	for(; l < npuntos; l+=n){
 		// Construye los n en 2 segmentos para el l order type
 		for(i = l, k = 0; i < (l+n); i++){
 			for(j = i+1; j < (l+n); j++){
@@ -77,7 +84,7 @@ int main(int argc, char *argv[]){
 			}	
 		}
 
-		bandera = 0;
+		//bandera = 0;
 		crossings = 0;
 
 		/*
@@ -99,7 +106,7 @@ int main(int argc, char *argv[]){
 					srojos[1] = segmentos[j];
 
 					// Busca los segmentos azules
-					for(k = 0; k < nsegmentos; k++){
+					for(k = i; k < nsegmentos; k++){
 						if(strcmp(segmentos[k].etiqueta, srojos[0].etiqueta) == 0 || strcmp(segmentos[k].etiqueta, srojos[1].etiqueta) == 0
 							|| comparten_punto(segmentos[k], srojos[0]) || comparten_punto(segmentos[k], srojos[1])){
 							continue;
@@ -120,12 +127,14 @@ int main(int argc, char *argv[]){
 									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
 									
 									crossings++;
-									bandera = 1;
-									//printf("Se encontro una crossing family\n");
+									//bandera = 1;
+									//fprintf(log, "Se encontro una crossing family\n");
 
-									//printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
+									//fprintf(log, "Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
+									fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
+									fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
 									
-									//printf("Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
+									//fprintf(log, "Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
 									//break;
 								}
 								/*else{
@@ -142,9 +151,9 @@ int main(int argc, char *argv[]){
 		}
 
 		ncrossings += crossings;
-		fprintf(log, "%d: %d\n", (l/n)+1, crossings);
+		//fprintf(log, "%d: %d\n", (l/n)+1, crossings);
 		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
-		siempre_existe &= bandera;
+		//siempre_existe &= bandera;
 		//printf("----------------------------------------------------\n");
 		
 		/*			
@@ -166,11 +175,13 @@ int main(int argc, char *argv[]){
 	printf("\n");
 	*/
 
+
 	printf("\nTotal de Crossing Families: %d\n", ncrossings);
+	/*
 	if(siempre_existe)
 		printf("Siempre existe una Crossing Families con n = %d\n", n);
 	else
 		printf("no existe siempre una Crossing Families con n = %d\n", n);
-
+	*/
 	return 0;
 }

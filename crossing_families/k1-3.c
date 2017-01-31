@@ -11,7 +11,7 @@ typedef struct k13{
 
 
 int main(int argc, char *argv[]){
-	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3, notypes, intersecciones, ncrossings;
+	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3, notypes, intersecciones, ncrossings, inicio, kotypes;
 	char order_type[50], etiqueta;
 	Punto apice, apice2;
 	K1_3 k1_3;
@@ -68,8 +68,14 @@ int main(int argc, char *argv[]){
 		if(i % n == 0) etiqueta = 'a';
 	}
 
+	printf("otype de inicio: "); scanf("%d", &inicio);
+	printf("otypes a procesar: "); scanf("%d", &kotypes);
+
+	l = (inicio - 1) * n;
+	npuntos = (kotypes == 0) ? npuntos : (l + (kotypes * n));
+	printf("iniciando desde otype: %d\n", (l/n)+1); //return 0; 
 	// Recorre los order types
-	for(l = 0; l < npuntos; l+=n){
+	for(; l < npuntos; l+=n){
 
 		/*
 		printf("otype %d:", (l/n)+1);
@@ -142,15 +148,14 @@ int main(int argc, char *argv[]){
 								if(interseccion(k1_3.s1, segmento) || interseccion(k1_3.s2, segmento)
 									|| interseccion(k1_3.s3, segmento)){
 								
-									//notypes++;
-									//fprintf(log, "se encontro una CF con k1_3: %s %s %s y apice %c en otype %d\n",
-									//	k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta, (l/n)+1);
+									fprintf(log, "%s%s%s%s\n",
+										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, /*apice2.etiqueta, */segmento.etiqueta);
 									intersecciones++;			
 								}
 
 							}
 							// Se cuenta cuantos segmentos intersectaron a la k13 y apice o
-							//printf("%d segmentos intersectaron al k1-3 %s %s %s con apice2 %c\n", intersecciones, k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta);
+							//fprintf(log, "%d segmentos intersectaron al k1-3 %s %s %s con apice2 %c\n", intersecciones, k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta);
 							
 							switch(n){
 								case 8:
@@ -185,7 +190,7 @@ int main(int argc, char *argv[]){
 			}
 		}
 		//fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
-		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
+		//fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
 		if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
 		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		//return 0;
