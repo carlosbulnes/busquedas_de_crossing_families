@@ -1,5 +1,5 @@
 2k28:
-	clear && gcc crossing_families/2k2.c -o crossing_families/prog -g -O2 -lm && crossing_families/prog 8
+	clear && gcc crossing_families/2k2.c -o crossing_families/prog -g -O2 && crossing_families/prog 8
 
 2k29:
 	clear && gcc crossing_families/2k2.c -o crossing_families/prog -g -O2 && crossing_families/prog 9

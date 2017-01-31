@@ -1,7 +1,7 @@
 import pygame, sys, os
 from pygame.locals import *
 
-ncrossings = 241
+ncrossings = 0
 n = 8
 
 def lee_archivo():
@@ -44,7 +44,7 @@ def dibuja(cont):
 	
 	pygame.display.flip()
 
-	print texto[i], texto[i+1], texto[i+2], texto[i+3], texto[i+4], texto[i+5], texto[i+6], texto[i+7]
+	print(texto[i], texto[i+1], texto[i+2], texto[i+3], texto[i+4], texto[i+5], texto[i+6], texto[i+7])
 
 	pygame.draw.circle(ventana, (0,0,0), a, 3)
 	pygame.draw.circle(ventana, (0,0,0), b, 3)
@@ -62,28 +62,26 @@ def dibuja(cont):
 
 	#cont = cont + 1
 
-pygame.init()
-ventana = pygame.display.set_mode((300,300))
-pygame.display.set_caption("2k2")
 
-fuente = pygame.font.Font(None, 20)
-
-archivo = open("crossing_families/log2k2-8")
 cont = 1
-mensaje = fuente.render(' ', 1, (0, 0, 0))
 texto = []
 i = 0
 
-lee_archivo()
+while True:
+	op = input("min/max: ")
 
-a = (218, 48)
-b = (157, 54)
-c = (88, 66)
-d = (76, 72)
-e = (61, 90)
-f = (13, 177)
-g = (55, 210)
-h = (243, 53)
+	if(op == "max"):
+		a, b, c, d, e, f, g, h = (218, 48), (157, 54), (88, 66), (76, 72), (61, 90), (13, 177), (55, 210), (243, 53)
+		ncrossings = 241
+		archivo = open("crossing_families/2k2-8max")
+		break
+	elif(op == "min"):
+		a, b, c, d, e, f, g, h = (236, 23), (53, 149), (123, 175), (149, 161), (201, 90), (179, 152), (167, 214), (180, 233)
+		ncrossings = 103
+		archivo = open("crossing_families/2k2-8min")
+		break
+
+lee_archivo()
 
 dic = {}
 
@@ -95,6 +93,14 @@ dic['e'] = e
 dic['f'] = f
 dic['g'] = g
 dic['h'] = h
+
+pygame.init()
+ventana = pygame.display.set_mode((300,300))
+pygame.display.set_caption("2k2")
+
+fuente = pygame.font.Font(None, 20)
+
+mensaje = fuente.render(' ', 1, (0, 0, 0))
 
 ventana.fill((255, 255, 255))
 mensaje = fuente.render(str(cont), 1, (0, 0, 0))

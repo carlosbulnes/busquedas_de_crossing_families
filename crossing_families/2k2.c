@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "geom.h"
 
 
@@ -11,9 +10,6 @@ int main(int argc, char *argv[]){
 	int crossings = 0, ncrossings = 0, siempre_existe = 1, bandera;
 	char order_type[50], etiqueta;
 
-	//system("clear");
-	//printf("Selecciona el valor de n entre 3 y 10: ");
-	//scanf("%d", &n);
 	if(argc < 2){
 		printf("Se necesita el valor de n como argumento\n");
 		return -1;
@@ -84,7 +80,6 @@ int main(int argc, char *argv[]){
 			}	
 		}
 
-		//bandera = 0;
 		crossings = 0;
 
 		/*
@@ -127,21 +122,17 @@ int main(int argc, char *argv[]){
 									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
 									
 									crossings++;
-									//bandera = 1;
-									//fprintf(log, "Se encontro una crossing family\n");
 
 									//fprintf(log, "Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
 									fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
 									
 									//fprintf(log, "Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
-									//break;
 								}
 								/*else{
 									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									
 									printf("Azules: %s y %s no son CF\n", sazules[0].etiqueta, sazules[1].etiqueta);
-									break;
 								}*/
 							}
 						}
@@ -153,35 +144,9 @@ int main(int argc, char *argv[]){
 		ncrossings += crossings;
 		//fprintf(log, "%d: %d\n", (l/n)+1, crossings);
 		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
-		//siempre_existe &= bandera;
-		//printf("----------------------------------------------------\n");
-		
-		/*			
-		printf("Los n en 2 segmentos del order type %d son: \n", (inicio/n)+1);
-		for(i = 0; i < nsegmentos; i++){
-			printf("|(%d, %d), (%d, %d)|, ", segmentos[i].a.x, segmentos[i].a.y, segmentos[i].b.x, segmentos[i].b.y);
-		}
-		printf("\n\n");
-		*/
 	}
-
-	/*
-	// Imprime los order types
-	for(i = 0, c = 1; i < npuntos; i++, c++){
-		printf("%c: (%d, %d), ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);
-
-		if(c % n == 0) printf("\n");
-	}
-	printf("\n");
-	*/
-
 
 	printf("\nTotal de Crossing Families: %d\n", ncrossings);
-	/*
-	if(siempre_existe)
-		printf("Siempre existe una Crossing Families con n = %d\n", n);
-	else
-		printf("no existe siempre una Crossing Families con n = %d\n", n);
-	*/
+
 	return 0;
 }
