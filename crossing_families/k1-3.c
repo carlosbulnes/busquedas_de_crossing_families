@@ -148,8 +148,8 @@ int main(int argc, char *argv[]){
 								if(interseccion(k1_3.s1, segmento) || interseccion(k1_3.s2, segmento)
 									|| interseccion(k1_3.s3, segmento)){
 								
-									fprintf(log, "%s%s%s%s\n",
-										k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, /*apice2.etiqueta, */segmento.etiqueta);
+									//fprintf(log, "%s%s%s%s\n",
+									//	k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, /*apice2.etiqueta, */segmento.etiqueta);
 									intersecciones++;			
 								}
 
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]){
 			}
 		}
 		//fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
-		//fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
+		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
 		if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
 		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		//return 0;

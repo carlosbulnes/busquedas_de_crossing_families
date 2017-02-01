@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <limits.h>
 #include "geom.h"
 
 
@@ -16,6 +17,16 @@ int main(int argc, char *argv[]){
 	}
 	
 	n = atoi(argv[1]);
+	
+	//long nnn = (long)65536*(long)65536;
+	//nnn = LONG_MAX;
+
+	//if(nnn == 4294967296)
+	//	printf("multiplico bien\n");
+	//else
+	//	printf("multiplico mal\n");
+
+	//printf("%ld\n", nnn); return 0;
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
@@ -122,7 +133,7 @@ int main(int argc, char *argv[]){
 									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
 									
 									crossings++;
-
+									
 									//fprintf(log, "Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
 									fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
@@ -133,6 +144,9 @@ int main(int argc, char *argv[]){
 									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									
 									printf("Azules: %s y %s no son CF\n", sazules[0].etiqueta, sazules[1].etiqueta);
+
+									getchar();
+									getchar();
 								}*/
 							}
 						}
@@ -142,7 +156,7 @@ int main(int argc, char *argv[]){
 		}
 
 		ncrossings += crossings;
-		//fprintf(log, "%d: %d\n", (l/n)+1, crossings);
+		fprintf(log, "%d: %d\n", (l/n)+1, crossings);
 		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 	}
 

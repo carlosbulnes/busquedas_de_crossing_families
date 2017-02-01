@@ -21,7 +21,12 @@ int comparten_punto(Segmento s1, Segmento s2){
 }
 
 int area(Punto a, Punto b, Punto c){
-	return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+	long r = (long)(b.x - a.x) * (long)(c.y - a.y) - (long)(c.x - a.x) * (long)(b.y - a.y);
+
+	if(r > 0) return 1;
+	else return -1;
+	
+	//return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
 }
 
 int izquierda(Punto a, Punto b, Punto c){
@@ -34,6 +39,6 @@ int Xor(int x, int y){
 
 int interseccion(Segmento s1, Segmento s2){
 	Punto a = s1.a, b = s1.b, c = s2.a, d = s2.b;
-	
+
 	return Xor(izquierda(a, b, c), izquierda(a, b, d)) && Xor(izquierda(c,d,a), izquierda(c,d,b));
 }

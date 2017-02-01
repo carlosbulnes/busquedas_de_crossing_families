@@ -14,7 +14,7 @@ def lee_archivo():
 		texto.append(archivo.read(1))
 		texto.append(archivo.read(1))
 		texto.append(archivo.read(1))
-		archivo.read(1)
+		#archivo.read(1)
 
 	archivo.close()
 
@@ -75,8 +75,8 @@ while True:
 	op = input("min/max: ")
 
 	if(op == "max"):
-		a, b, c, d, e, f, g, h, i = (634.52, 574.69), (654.30, 494.28), (521.30, 0.08), (265.38, 46.56), (6.94, 38.16), (214.98, 370.24), (345.46, 523.68), (163.74, 613.84), (1.06, 655.28)
-		ncrossings = 2394
+		a, b, c, d, e, f, g, h, i = (21.49, 283.89), (30.00, 315.62), (49.34, 313.68), (63.61, 269.56), (64.59, 248.12), (54.28, 237.53), (33.80, 233.30), (25.76, 250.42), (20.55, 278.58) 
+		ncrossings = 2169
 		archivo = open("crossing_families/2k2-9max")
 		break
 	elif(op == "min"):
