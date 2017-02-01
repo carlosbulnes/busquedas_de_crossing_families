@@ -80,9 +80,9 @@ while True:
 		archivo = open("crossing_families/2k2-9max")
 		break
 	elif(op == "min"):
-		a, b, c, d, e, f, g, h = (236, 23), (53, 149), (123, 175), (149, 161), (201, 90), (179, 152), (167, 214), (180, 233)
-		ncrossings = 968
-		archivo = open("crossing_families/2k2-8min")
+		a, b, c, d, e, f, g, h, i = (22.81, 69.02), (367.50, 556.10), (392.61, 456.74), (430.95, 295.28), (276.51, 199.70), (249.51, 163.52), (466.05, 195.65), (549.48, 185.93), (646.95, 99.26)
+		ncrossings = 961
+		archivo = open("crossing_families/2k2-9min")
 		break
 
 lee_archivo()

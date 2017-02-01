@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <limits.h>
 #include "geom.h"
 
 
@@ -17,16 +16,6 @@ int main(int argc, char *argv[]){
 	}
 	
 	n = atoi(argv[1]);
-	
-	//long nnn = (long)65536*(long)65536;
-	//nnn = LONG_MAX;
-
-	//if(nnn == 4294967296)
-	//	printf("multiplico bien\n");
-	//else
-	//	printf("multiplico mal\n");
-
-	//printf("%ld\n", nnn); return 0;
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;

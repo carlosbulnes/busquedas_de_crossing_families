@@ -23,10 +23,7 @@ int comparten_punto(Segmento s1, Segmento s2){
 int area(Punto a, Punto b, Punto c){
 	long r = (long)(b.x - a.x) * (long)(c.y - a.y) - (long)(c.x - a.x) * (long)(b.y - a.y);
 
-	if(r > 0) return 1;
-	else return -1;
-	
-	//return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+	return r > 0;
 }
 
 int izquierda(Punto a, Punto b, Punto c){
