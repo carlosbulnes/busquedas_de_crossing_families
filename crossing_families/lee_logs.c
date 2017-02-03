@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
 	FILE *file;
 	int otype, ncrossings;
 	CrossingFamily min, max;
-	char c;//, nombre[50];
+	char c;
 
 
 	/*
@@ -37,7 +37,6 @@ int main(int argc, char *argv[]){
 	max.ncrossings = min.ncrossings;
 
 	while(!feof(file)){
-		//printf("%d %c %d\t", otype, c, ncrossings);
 		fscanf(file, "%d%c %d", &otype, &c, &ncrossings);
 
 		if(ncrossings < min.ncrossings){
@@ -49,7 +48,6 @@ int main(int argc, char *argv[]){
 			max.otype = otype;
 			max.ncrossings = ncrossings;
 		}
-
 	}
 	
 	printf("Maximo otype %d con %d Crossing Families\n", max.otype, max.ncrossings);

@@ -124,8 +124,8 @@ int main(int argc, char *argv[]){
 									crossings++;
 									
 									//fprintf(log, "Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
-									fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
-									fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
+									//fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
+									//fprintf(log, "%c%c%c%c ", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
 									
 									//fprintf(log, "Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
 								}

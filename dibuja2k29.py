@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import pygame, sys, os
 from pygame.locals import *
 
@@ -77,12 +79,12 @@ while True:
 	if(op == "max"):
 		a, b, c, d, e, f, g, h, i = (21.49, 283.89), (30.00, 315.62), (49.34, 313.68), (63.61, 269.56), (64.59, 248.12), (54.28, 237.53), (33.80, 233.30), (25.76, 250.42), (20.55, 278.58) 
 		ncrossings = 2169
-		archivo = open("crossing_families/2k2-9max")
+		archivo = open("crossing_families/resultados/2k2-9max")
 		break
 	elif(op == "min"):
 		a, b, c, d, e, f, g, h, i = (22.81, 69.02), (367.50, 556.10), (392.61, 456.74), (430.95, 295.28), (276.51, 199.70), (249.51, 163.52), (466.05, 195.65), (549.48, 185.93), (646.95, 99.26)
 		ncrossings = 961
-		archivo = open("crossing_families/2k2-9min")
+		archivo = open("crossing_families/resultados/2k2-9min")
 		break
 
 lee_archivo()
