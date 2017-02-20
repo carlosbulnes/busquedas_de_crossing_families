@@ -67,6 +67,7 @@ int main(int argc, char *argv[]){
 	l = (inicio - 1) * n;
 	npuntos = (kotypes == 0) ? npuntos : (l + (kotypes * n));
 	printf("iniciando desde otype: %d\n", (l/n)+1); //return 0; 
+	
 	// Recorre los order types
 	for(; l < npuntos; l+=n){
 		// Construye los n en 2 segmentos para el l order type
@@ -101,7 +102,7 @@ int main(int argc, char *argv[]){
 					srojos[1] = segmentos[j];
 
 					// Busca los segmentos azules
-					for(k = i; k < nsegmentos; k++){
+					for(k = 0; k < nsegmentos; k++){
 						if(strcmp(segmentos[k].etiqueta, srojos[0].etiqueta) == 0 || strcmp(segmentos[k].etiqueta, srojos[1].etiqueta) == 0
 							|| comparten_punto(segmentos[k], srojos[0]) || comparten_punto(segmentos[k], srojos[1])){
 							continue;
@@ -124,11 +125,13 @@ int main(int argc, char *argv[]){
 									crossings++;
 									
 									//fprintf(log, "Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
-									//fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
-									//fprintf(log, "%c%c%c%c ", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
+									fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
+									fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
 									
 									//fprintf(log, "Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
 								}
+									//fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
+									//fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);								
 								/*else{
 									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
 									
