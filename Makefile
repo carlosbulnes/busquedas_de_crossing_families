@@ -17,5 +17,7 @@ k1-3-10:
 	clear && gcc crossing_families/k1-3.c -o prog -g -O2 && ./prog 10
 
 ik2-8:
-	clear && gcc intersecting_families/K2.c -o prog -g -O2 && ./prog 8
+	clear && gcc intersecting_families/K2/K2.c -o prog -g -O2 && ./prog 8
 
+ik2-n:
+	clear && gcc intersecting_families/K2/K2-n.c -o prog -g -O2 && ./prog 10
