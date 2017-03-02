@@ -24,3 +24,9 @@ ik2-n:
 
 dibuja8:
 	g++ dibuja.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja 8
+
+dibuja9:
+	g++ dibuja.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja 9
+
+dibuja10:
+	g++ dibuja.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja 10

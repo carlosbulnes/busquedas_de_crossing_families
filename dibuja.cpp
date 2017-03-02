@@ -10,28 +10,17 @@ typedef struct punto{
 	uint16_t y;
 }Punto;
 
+typedef struct {
+	char etiqueta;
+	float x;
+	float y;
+}Puntof;
+
 Punto *puntos;
-Punto *puntos_otype;
-int n, ancho = 1200, alto = 700;
-char buffer[20]="";//bufers para escribir en la pantalla
-int otype = 0;
-
-void procesa_puntos(){
-	int inicio, i, l;
-
-	//printf("otype de inicio: "); scanf("%d", &inicio);
-	l = (otype - 1) * n;
-
-	for(i = 0; i < n; i++){
-		puntos_otype[i].etiqueta = puntos[l+i].etiqueta;
-		puntos_otype[i].x = puntos[l+i].x;
-		puntos_otype[i].y = puntos[l+i].y;
-	}
-
-	for(i = 0; i < n; i++)
-		printf("%c = (%d, %d)\n", puntos_otype[i].etiqueta, puntos_otype[i].x, puntos_otype[i].y);
-
-}
+Puntof *puntos_otype;
+int n, ancho = 1000, alto = 800;
+char buffer[20]="";
+int otype = 1, otypes;
 
 void reshape_cb (int w, int h) {
 	if (w==0||h==0) return;
@@ -43,74 +32,137 @@ void reshape_cb (int w, int h) {
 	glLoadIdentity ();
 }
 
+void dibuja() {
+	int i;
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glPointSize(5);
+	glBegin(GL_POINTS);
+	for(i = 0; i < n; i++){
+		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
+	}
+	glEnd();
+	
+	glColor3f(0,0,0);
+	glLineWidth(1);
+	for(i = 0; i < n; i++){
+		for(int j = i+1; j < n; j++){
+			glBegin(GL_LINE_STRIP);
+			glVertex2i(puntos_otype[i].x, puntos_otype[i].y);
+			glVertex2i(puntos_otype[j].x, puntos_otype[j].y);
+			glEnd();
+		}
+	}
+	glutSwapBuffers();
+}
+
+void procesa_puntos(){
+	int i, l;
+	int xmin, xmax, ymin, ymax, ancho_otype, alto_otype;
+
+	l = (otype - 1) * n;
+
+	for(i = 0; i < n; i++){
+		puntos_otype[i].etiqueta = puntos[l+i].etiqueta;
+		puntos_otype[i].x = puntos[l+i].x;
+		puntos_otype[i].y = puntos[l+i].y;
+	}
+
+	xmin = xmax = puntos_otype[0].x;
+	ymin = ymax = puntos_otype[0].y;
+
+	for(i = 1; i < n; i++){
+		if(puntos_otype[i].x < xmin)
+			xmin = puntos_otype[i].x;
+		else if(puntos_otype[i].x > xmax)
+			xmax = puntos_otype[i].x;
+
+		if(puntos_otype[i].y < ymin)
+			ymin = puntos_otype[i].y;
+		else if(puntos_otype[i].y > ymax)
+			ymax = puntos_otype[i].y;
+	}
+
+	ancho_otype = (xmax-xmin);
+	alto_otype = (ymax-ymin);
+
+	//printf("%d %d\n", ancho_otype, alto_otype);
+	//for(i = 0; i < n; i++)
+	//	printf("%c = (%.2f, %.2f)\n", puntos_otype[i].etiqueta, puntos_otype[i].x, puntos_otype[i].y);
+
+	if(alto_otype > ancho_otype){
+		for(i = 0; i < n; i++){
+			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-130))/alto_otype) + 10;
+			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-130))/alto_otype) + 10;
+		}
+	}else{
+		for(i = 0; i < n; i++){
+			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-130))/ancho_otype) + 10;
+			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-130))/ancho_otype) + 10;
+		}		
+	}
+
+	//for(i = 0; i < n; i++)
+	//	printf("%c = (%.2f, %.2f)\n", puntos_otype[i].etiqueta, puntos_otype[i].x, puntos_otype[i].y);
+
+	//glutPostRedisplay();
+}
+
 void keyboard(unsigned char key, int x, int y){
 	if(key == 0x1b)
-		exit(0); // terminar program
+		exit(0); // terminar programa
 
 	if(key == 13){
-		procesa_puntos();
+		otype = atoi(buffer);
+		if(otype > 0 && otype <= otypes)
+			procesa_puntos();
 		strcpy(buffer, "");
 	}
 
-	if((key>=97&&key<=122)||(key>=65&&key<=90)||key==32||(key>=48&&key<=57)){//si es letra min, may, espacio,numeros
-		int len = strlen(buffer);
+	int len = strlen(buffer);
+	// Verifica que el string de buffer no esté lleno y que esté ingresando solo numeros
+	if(len < 20 && (key >=48 && key <=57)){
+		buffer[len] = key;
+		buffer[len+1] = '\0';
+		//printf("%s\n", buffer);
+	}	
+	
+	glutPostRedisplay();
+}
 
-		if(len < 20){//si se puede escribir en el buffer se escribe
-			buffer[len] = key;
-			buffer[len+1] = '\0';
-			otype = atoi(buffer);
+void special(int key, int x, int y){
+	if(key == GLUT_KEY_LEFT){
+		if(otype > 1){
+			otype--;
+			procesa_puntos();
 		}
 	}
-	
-	printf("%d\n", otype);
-	glutPostRedisplay();
-}
-
-/*
-void special(int key, int x, int y){
-
-	if(key==GLUT_KEY_END){
-		strcpy(buffer,"");
+	else if(key == GLUT_KEY_RIGHT){
+		if(otype < otypes){
+			otype++;
+			procesa_puntos();
+		}
 	}
 	glutPostRedisplay();
 }
-*/
 
-void display_cb() {
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glColor3f(1,1,0); glLineWidth(3);
-	glBegin(GL_LINE_STRIP);
-	glVertex2i(130,060); glVertex2i( 50,060);
-	glVertex2i(130,150); glVertex2i( 50,150);
-	glEnd();
-	glBegin(GL_LINES);
-	glVertex2i( 70,100); glVertex2i(110,100);
-	glVertex2i(150,100); glVertex2i(230,100);
-	glVertex2i(190,140); glVertex2i(190,070);
-	glVertex2i(250,100); glVertex2i(330,100);
-	glVertex2i(290,140); glVertex2i(290,070);
-	glEnd();
-	
-	glutSwapBuffers();
-}
 
 void inicializa_opengl(){
 	glutInitDisplayMode (GLUT_RGBA|GLUT_DOUBLE);
 	glutInitWindowSize (ancho,alto);
 	glutInitWindowPosition (100,100);
-	glutCreateWindow ("Ventana OpenGL");
+	glutCreateWindow ("Order Types");
 	glutKeyboardFunc(keyboard);
-	//glutSpecialFunc (special);	
-	glutDisplayFunc (display_cb);
+	glutSpecialFunc (special);	
+	glutDisplayFunc (dibuja);
 	glutReshapeFunc (reshape_cb);
 	glClearColor(1.f,1.f,1.f,1.f);
 }
 
-
 int main(int argc, char *argv[]){
 	
-	int otypes, c = 1, i, l, bytes, npuntos, inicio, kotypes;
+	int i, l, bytes, npuntos, inicio, kotypes;
 	char order_type[50], etiqueta;
 	
 	if(argc < 1){
@@ -119,7 +171,6 @@ int main(int argc, char *argv[]){
 	}
 	
 	n = atoi(argv[1]);
-	//inicio = atoi(argv[2]);
 	
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; break;
@@ -133,7 +184,7 @@ int main(int argc, char *argv[]){
 	}
 	
 	FILE *file = fopen(order_type, "r");
-	uint16_t a, b;
+	uint16_t a = 0, b = 0;
 	
 	if(file == NULL){
 		printf("No se puede abrir archivo\n");
@@ -142,7 +193,7 @@ int main(int argc, char *argv[]){
 	
 	npuntos = otypes*n;
 	puntos = (Punto*)malloc(sizeof(Punto)*npuntos);
-	puntos_otype = (Punto*)malloc(sizeof(Punto)*n);
+	puntos_otype = (Puntof*)malloc(sizeof(Puntof)*n);
 
   	// Lectura del archivo de la base de datos
 	etiqueta = 'A';
@@ -150,6 +201,7 @@ int main(int argc, char *argv[]){
 		fread(&a, bytes, 1, file);
 		fread(&b, bytes, 1, file);
 
+		//printf("Leidos %d %d\n", a, b); getchar();
 		puntos[i].etiqueta = etiqueta;
 		puntos[i].x = a;
 		puntos[i].y = b;
@@ -160,22 +212,11 @@ int main(int argc, char *argv[]){
 	}
 	fclose(file);
 
+	procesa_puntos();
+
 	glutInit(&argc, argv);
 	inicializa_opengl();
-	//glutIdleFunc(procesa_puntos);
-/*
-	for(i = 0;i < n; i++){
-		printf("%c = (%d, %d)\n", puntos_otype[i].etiqueta, puntos_otype[i].x, puntos_otype[i].y);
-	}
-*/
-	//npuntos = otypes*n;
-	//lee_otype();
-
-
-	//lee_otype();
-	//glutDisplayFunc(lee_otype);
-	//glutIdleFunc(lee_otype);
-	//glutReshapeFunc (reshape_cb);
+	dibuja();
 
 	glutMainLoop();
 	return 0;
