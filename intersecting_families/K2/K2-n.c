@@ -4,58 +4,6 @@
 #include <time.h>
 #include "geom.h"
 
-
-int son_intersecting_familiy(Segmento s1, Segmento s2, Segmento s3, Segmento s4, Segmento s5, Segmento s6, Segmento s7, Segmento s8, Segmento s9){
-	int valor = 1;
-
-	valor &= (interseccion(s1, s2) || comparten_punto(s1, s2));
-
-	valor &= (interseccion(s1, s3) || comparten_punto(s1, s3));
-	valor &= (interseccion(s2, s3) || comparten_punto(s2, s3));
-
-	valor &= (interseccion(s1, s4) || comparten_punto(s1, s4));
-	valor &= (interseccion(s2, s4) || comparten_punto(s2, s4));
-	valor &= (interseccion(s3, s4) || comparten_punto(s3, s4));
-
-	valor &= (interseccion(s1, s5) || comparten_punto(s1, s5));
-	valor &= (interseccion(s2, s5) || comparten_punto(s2, s5));
-	valor &= (interseccion(s3, s5) || comparten_punto(s3, s5));
-	valor &= (interseccion(s4, s5) || comparten_punto(s4, s5));
-
-	valor &= (interseccion(s1, s6) || comparten_punto(s1, s6));
-	valor &= (interseccion(s2, s6) || comparten_punto(s2, s6));
-	valor &= (interseccion(s3, s6) || comparten_punto(s3, s6));
-	valor &= (interseccion(s4, s6) || comparten_punto(s4, s6));
-	valor &= (interseccion(s5, s6) || comparten_punto(s5, s6));
-
-	valor &= (interseccion(s1, s7) || comparten_punto(s1, s7));
-	valor &= (interseccion(s2, s7) || comparten_punto(s2, s7));
-	valor &= (interseccion(s3, s7) || comparten_punto(s3, s7));
-	valor &= (interseccion(s4, s7) || comparten_punto(s4, s7));
-	valor &= (interseccion(s5, s7) || comparten_punto(s5, s7));
-	valor &= (interseccion(s6, s7) || comparten_punto(s6, s7));
-
-	valor &= (interseccion(s1, s8) || comparten_punto(s1, s8));
-	valor &= (interseccion(s2, s8) || comparten_punto(s2, s8));
-	valor &= (interseccion(s3, s8) || comparten_punto(s3, s8));
-	valor &= (interseccion(s4, s8) || comparten_punto(s4, s8));
-	valor &= (interseccion(s5, s8) || comparten_punto(s5, s8));
-	valor &= (interseccion(s6, s8) || comparten_punto(s6, s8));
-	valor &= (interseccion(s7, s8) || comparten_punto(s7, s8));
-
-	valor &= (interseccion(s1, s9) || comparten_punto(s1, s9));
-	valor &= (interseccion(s2, s9) || comparten_punto(s2, s9));
-	valor &= (interseccion(s3, s9) || comparten_punto(s3, s9));
-	valor &= (interseccion(s4, s9) || comparten_punto(s4, s9));
-	valor &= (interseccion(s5, s9) || comparten_punto(s5, s9));
-	valor &= (interseccion(s6, s9) || comparten_punto(s6, s9));
-	valor &= (interseccion(s7, s9) || comparten_punto(s7, s9));
-	valor &= (interseccion(s7, s9) || comparten_punto(s7, s9));
-
-	return valor;
-}
-
-
 int main(int argc, char *argv[]){
 	
 	if(argc < 2){
@@ -85,21 +33,36 @@ int main(int argc, char *argv[]){
 	FILE *file = fopen(order_type, "rb");
 
 	strcpy(order_type, "intersecting_families/K2/logK2-");
+	//strcpy(order_type, "cierres_convexos-");
 	strcat(order_type, argv[1]);
 	strcat(order_type, "int");
 
-	FILE *log = fopen(order_type, "a");
+	FILE *log = fopen(order_type, "w");
 	
-	npuntos = otypes*n;
-
-	Punto *puntos = (Punto*)malloc(sizeof(Punto)*npuntos);
-	Segmento *segmentos = (Segmento*)malloc(sizeof(Segmento)*nsegmentos);	
-
 	if(file == NULL){
 		printf("No se puede abrir archivo\n");
 		return 0;
 	}
 
+	npuntos = otypes*n;
+
+	Punto *puntos = (Punto*)malloc(sizeof(Punto)*npuntos);
+	Segmento *segmentos = (Segmento*)malloc(sizeof(Segmento)*nsegmentos);
+	
+	/*
+	// Variables para conocer el cierre vonvexo
+	point_t puntos_otype[n];
+	point_t **hull;
+	ssize_t hull_size;
+
+  	hull = (point_t **)malloc(n*sizeof(point_t));
+
+  	for(i = 0; i < n; i++){
+    	hull[i] = (point_t *)malloc(sizeof(point_t));
+  	}
+	*/
+
+  	// Lectura del archivo de la base de datos
 	etiqueta = 'a';
 	for(i = 0; i < npuntos;){
 		fread(&a, bytes, 1, file);
@@ -125,6 +88,21 @@ int main(int argc, char *argv[]){
 	//clock_t start = clock();
 	// Recorre los order types
 	for(; l < npuntos; l+=n){
+		/*
+		// Llena un arreglo con los n puntos actuales
+		for(i = 0; i < n; i++){
+			puntos_otype[i].x = puntos[l+i].x;
+			puntos_otype[i].y = puntos[l+i].y;
+			//puntos_otype[i].etiqueta = puntos[l+i].etiqueta;
+		}
+
+		// Calcula el cierre convexo
+		convex_hull(puntos_otype, 8, &hull, &hull_size);
+
+		fprintf(log, "%d\n", (int)(hull_size-1));
+		
+		continue;
+		*/
 		// Construye los n en 2 segmentos para el l order type
 		for(i = l, k = 0; i < (l+n); i++){
 			for(j = i+1; j < (l+n); j++){
@@ -192,7 +170,7 @@ int main(int argc, char *argv[]){
 										intersectan &= interseccion(segmentos[i6], segmentos[i8]) || comparten_punto(segmentos[i6], segmentos[i8]);
 										intersectan &= interseccion(segmentos[i7], segmentos[i8]) || comparten_punto(segmentos[i7], segmentos[i8]);
 										if(!intersectan) continue;
-										for(i9 = i8+1; i9 < nsegmentos; i9++){
+										/*for(i9 = i8+1; i9 < nsegmentos; i9++){
 											intersectan = 1;
 											intersectan &= interseccion(segmentos[i1], segmentos[i9]) || comparten_punto(segmentos[i1], segmentos[i9]);
 											intersectan &= interseccion(segmentos[i2], segmentos[i9]) || comparten_punto(segmentos[i2], segmentos[i9]);
@@ -214,7 +192,7 @@ int main(int argc, char *argv[]){
 												intersectan &= interseccion(segmentos[i7], segmentos[i10]) || comparten_punto(segmentos[i7], segmentos[i10]);
 												intersectan &= interseccion(segmentos[i8], segmentos[i10]) || comparten_punto(segmentos[i8], segmentos[i10]);
 												intersectan &= interseccion(segmentos[i9], segmentos[i10]) || comparten_punto(segmentos[i9], segmentos[i10]);
-												if(!intersectan) continue;
+												if(!intersectan) continue;*/
 											//clock_t start = clock();
 											//if(son_intersecting_familiy(segmentos[i1], segmentos[i2], segmentos[i3], segmentos[i4], 
 											//	segmentos[i5], segmentos[i6], segmentos[i7], segmentos[i8], segmentos[i9])){
@@ -225,8 +203,8 @@ int main(int argc, char *argv[]){
 											//}
 											//printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 											//return 0;
-											}
-										}
+											//}
+										//}
 									}
 								}
 							}

@@ -20,4 +20,7 @@ ik2-8:
 	clear && gcc intersecting_families/K2/K2.c -o prog -g -O2 && ./prog 8
 
 ik2-n:
-	clear && gcc intersecting_families/K2/K2-n.c -o prog -g -O2 && ./prog 10
+	clear && gcc intersecting_families/K2/K2-n.c -o prog -g -O2 && ./prog 8
+
+dibuja8:
+	g++ dibuja.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja 8
