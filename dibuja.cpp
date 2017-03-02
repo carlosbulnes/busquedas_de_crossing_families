@@ -19,7 +19,7 @@ typedef struct {
 Punto *puntos;
 Puntof *puntos_otype;
 int n, ancho = 1000, alto = 800;
-char buffer[20]="";
+char buffer[20]="", textos[50] = "Otype 1", buffer2[20];
 int otype = 1, otypes;
 
 void reshape_cb (int w, int h) {
@@ -32,11 +32,23 @@ void reshape_cb (int w, int h) {
 	glLoadIdentity ();
 }
 
+void print(int x, int y, char *string){
+	glRasterPos2f(x,y);
+	
+	int len = strlen(string);
+
+	for (int i = 0; i < len; i++) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,string[i]);
+	}
+}
+
 void dibuja() {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glColor3f(1.0f, 0.0f, 0.0f);
+	print(ancho-200,alto-50,textos);
+
+	glColor3f(0.0, 0.0, 1.0);
 	glPointSize(5);
 	glBegin(GL_POINTS);
 	for(i = 0; i < n; i++){
@@ -44,8 +56,8 @@ void dibuja() {
 	}
 	glEnd();
 	
-	glColor3f(0,0,0);
-	glLineWidth(1);
+	glColor3f(.5,.5,.5);
+	glLineWidth(.2);
 	for(i = 0; i < n; i++){
 		for(int j = i+1; j < n; j++){
 			glBegin(GL_LINE_STRIP);
@@ -93,13 +105,13 @@ void procesa_puntos(){
 
 	if(alto_otype > ancho_otype){
 		for(i = 0; i < n; i++){
-			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-130))/alto_otype) + 10;
-			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-130))/alto_otype) + 10;
+			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-30))/alto_otype) + 10;
+			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-30))/alto_otype) + 10;
 		}
 	}else{
 		for(i = 0; i < n; i++){
-			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-130))/ancho_otype) + 10;
-			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-130))/ancho_otype) + 10;
+			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-30))/ancho_otype) + 10;
+			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-30))/ancho_otype) + 10;
 		}		
 	}
 
@@ -125,7 +137,8 @@ void keyboard(unsigned char key, int x, int y){
 	if(len < 20 && (key >=48 && key <=57)){
 		buffer[len] = key;
 		buffer[len+1] = '\0';
-		//printf("%s\n", buffer);
+		strcpy(textos, "Otype: ");
+		strcat(textos, buffer);
 	}	
 	
 	glutPostRedisplay();
@@ -136,13 +149,31 @@ void special(int key, int x, int y){
 		if(otype > 1){
 			otype--;
 			procesa_puntos();
+			strcpy(textos, "Otype: ");
+			sprintf(buffer2, "%d", otype);
+			strcat(textos, buffer2);
 		}
 	}
 	else if(key == GLUT_KEY_RIGHT){
 		if(otype < otypes){
 			otype++;
 			procesa_puntos();
+			strcpy(textos, "Otype: ");
+			sprintf(buffer2, "%d", otype);
+			strcat(textos, buffer2);
 		}
+	}else if(key == GLUT_KEY_END){
+		otype = otypes;
+		procesa_puntos();
+		strcpy(textos, "Otype: ");
+		sprintf(buffer2, "%d", otype);
+		strcat(textos, buffer2);		
+	}else if(key == GLUT_KEY_HOME){
+		otype = 1;
+		procesa_puntos();
+		strcpy(textos, "Otype: ");
+		sprintf(buffer2, "%d", otype);
+		strcat(textos, buffer2);		
 	}
 	glutPostRedisplay();
 }
