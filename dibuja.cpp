@@ -55,6 +55,12 @@ void dibuja() {
 		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
 	}
 	glEnd();
+
+	glColor3f(1.0, 0.0, 0.0);
+	for(i = 0; i < n; i++){
+		glRasterPos2f(puntos_otype[i].x, puntos_otype[i].y);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, puntos_otype[i].etiqueta);
+	}
 	
 	glColor3f(.5,.5,.5);
 	glLineWidth(.2);

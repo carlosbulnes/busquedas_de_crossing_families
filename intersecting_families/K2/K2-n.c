@@ -196,9 +196,9 @@ int main(int argc, char *argv[]){
 											//clock_t start = clock();
 											//if(son_intersecting_familiy(segmentos[i1], segmentos[i2], segmentos[i3], segmentos[i4], 
 											//	segmentos[i5], segmentos[i6], segmentos[i7], segmentos[i8], segmentos[i9])){
-											//	fprintf(log, "%s%s%s%s%s%s%s%s%s ", 
-											//		segmentos[i1].etiqueta, segmentos[i2].etiqueta, segmentos[i3].etiqueta, segmentos[i4].etiqueta, 
-											//		segmentos[i5].etiqueta, segmentos[i6].etiqueta, segmentos[i7].etiqueta, segmentos[i8].etiqueta, segmentos[i9].etiqueta);
+												fprintf(log, "%s%s%s%s%s%s%s%s ", 
+													segmentos[i1].etiqueta, segmentos[i2].etiqueta, segmentos[i3].etiqueta, segmentos[i4].etiqueta, 
+													segmentos[i5].etiqueta, segmentos[i6].etiqueta, segmentos[i7].etiqueta, segmentos[i8].etiqueta/*, segmentos[i9].etiqueta*/);
 												cont++;
 											//}
 											//printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
