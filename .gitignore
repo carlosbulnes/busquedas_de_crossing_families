@@ -1,5 +1,8 @@
 order_types/
 prog
 crossing_families/log*
-intersecting_families/log*
+intersecting_families/K2/convex_hull
 otypes*
+dibuja
+lee_otype
+crossing_number/crossing
