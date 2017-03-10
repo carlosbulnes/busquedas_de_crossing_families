@@ -192,7 +192,10 @@ void keyboard(unsigned char key, int x, int y){
 			procesa_puntos();
 			strcpy(textos2, "Int. Family ");
 			sprintf(buffer2, "%d", kint_fam);
-			strcat(textos2, buffer2);			
+			strcat(textos2, buffer2);
+			strcat(textos2, "/");
+			sprintf(buffer2, "%d", nintersecting_families);
+			strcat(textos2, buffer2);
 		}
 		strcpy(buffer, "");
 	}else if(key == 32){
@@ -203,6 +206,9 @@ void keyboard(unsigned char key, int x, int y){
 			procesa_puntos();
 			strcpy(textos2, "Int. Family ");
 			sprintf(buffer2, "%d", kint_fam);
+			strcat(textos2, buffer2);
+			strcat(textos2, "/");
+			sprintf(buffer2, "%d", nintersecting_families);
 			strcat(textos2, buffer2);			
 		}
 
@@ -269,6 +275,9 @@ void special(int key, int x, int y){
 	strcpy(textos2, "Int. Family ");
 	sprintf(buffer2, "%d", kint_fam);
 	strcat(textos2, buffer2);	
+	strcat(textos2, "/");
+	sprintf(buffer2, "%d", nintersecting_families);
+	strcat(textos2, buffer2);
 
 	glutPostRedisplay();
 }
@@ -340,6 +349,9 @@ int main(int argc, char *argv[]){
 	fclose(file);
 
 	procesa_puntos();
+	strcat(textos2, "/");
+	sprintf(buffer2, "%d", nintersecting_families);
+	strcat(textos2, buffer2);
 
 	glutInit(&argc, argv);
 	inicializa_opengl();
