@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "geom.h"
 
 typedef struct k2{
@@ -73,6 +74,7 @@ int main(int argc, char *argv[]){
 	npuntos = (kotypes == 0) ? npuntos : (l + (kotypes * n));
 	printf("iniciando desde otype: %d\n", (l/n)+1); //return 0; 
 	
+	clock_t start = clock();
 	// Recorre los order types
 	for(; l < npuntos; l+=n){
 		// Construye los n en 2 segmentos para el l order type
@@ -99,22 +101,23 @@ int main(int argc, char *argv[]){
 			}
 		}
 
-		printf("hay %d 2k2 que no comparten punto\n", k); //return 0;
+		//printf("hay %d 2k2 que no comparten punto\n", k); //return 0;
 		n2k2 = k;
 		crossings = 0;
 
 		for(i = 0; i < n2k2; i++){
 			for(j = i+1; j < n2k2; j++){
+				//clock_t start = clock();
 				if(!comparten_punto(a2k2[i].s1, a2k2[j].s1) && !comparten_punto(a2k2[i].s1, a2k2[j].s2) && !comparten_punto(a2k2[i].s2, a2k2[j].s1) && !comparten_punto(a2k2[i].s2, a2k2[j].s2)){
 					if(interseccion(a2k2[i].s1, a2k2[j].s1) || interseccion(a2k2[i].s1, a2k2[j].s2) || interseccion(a2k2[i].s2, a2k2[j].s1) || interseccion(a2k2[i].s2, a2k2[j].s2)){
 						crossings++;
-						fprintf(log, "%s%s", a2k2[i].s1.etiqueta, a2k2[i].s2.etiqueta);
-						fprintf(log, "%s%s\n", a2k2[j].s1.etiqueta, a2k2[j].s2.etiqueta);
+						//fprintf(log, "%s%s", a2k2[i].s1.etiqueta, a2k2[i].s2.etiqueta);
+						//fprintf(log, "%s%s\n", a2k2[j].s1.etiqueta, a2k2[j].s2.etiqueta);
 					}
 				}
+				//printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC); return 0;
 			}
 		}
-
 
 		/*
 		// Imprime los puntos del order type
@@ -186,6 +189,7 @@ int main(int argc, char *argv[]){
 		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 	}
 
+	printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 	printf("\nTotal de Crossing Families: %d\n", ncrossings);
 
 	return 0;

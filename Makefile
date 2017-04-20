@@ -32,4 +32,4 @@ dibuja10:
 	g++ dibuja.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja 10
 
 dibujak2:
-	g++ intersecting_families/K2/dibuja_familias.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja 8
+	g++ intersecting_families/K2/dibuja_familias.cpp -lglut -lGL -lGLU -o dibuja && ./dibuja

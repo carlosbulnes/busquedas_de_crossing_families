@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "geom.h"
 
 typedef struct k13{
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]){
 	}
 
 	i = 0;
-	etiqueta = 'a';
+	etiqueta = '1';
 	while(!feof(file)){
 
 		fread(&a, bytes, 1, file);
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]){
 
 		etiqueta += 1;
 		i++;
-		if(i % n == 0) etiqueta = 'a';
+		if(i % n == 0) etiqueta = '1';
 	}
 
 	printf("otype de inicio: "); scanf("%d", &inicio);
@@ -74,16 +75,10 @@ int main(int argc, char *argv[]){
 	l = (inicio - 1) * n;
 	npuntos = (kotypes == 0) ? npuntos : (l + (kotypes * n));
 	printf("iniciando desde otype: %d\n", (l/n)+1); //return 0; 
+	
+	clock_t start = clock();
 	// Recorre los order types
 	for(; l < npuntos; l+=n){
-
-		/*
-		printf("otype %d:", (l/n)+1);
-		for(i = l; i < (l+n); i++){
-			printf("%c: (%d, %d) ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);	
-		}
-		printf("\n");
-		*/
 		
 		// Recorre los n puntos del order type
 		for(i = 0, nk1_3 = 0, ncrossings = 0, notypes = 0; i < n; i++){
@@ -101,7 +96,6 @@ int main(int argc, char *argv[]){
 			k1_3.s3.etiqueta[0] = apice.etiqueta;
 			k1_3.s3.etiqueta[2] = '\0';
 			k1_3.s3.a = apice;
-
 
 			// Selecciona el primer segmentos de la k1.3
 			for(j = 0; j < n; j++){
@@ -144,7 +138,7 @@ int main(int argc, char *argv[]){
 								segmento.etiqueta[1] = puntos[l+p].etiqueta;
 								segmento.etiqueta[2] = '\0';
 								segmento.b = puntos[l+p];
-
+								
 								if(interseccion(k1_3.s1, segmento) || interseccion(k1_3.s2, segmento)
 									|| interseccion(k1_3.s3, segmento)){
 								
@@ -152,7 +146,6 @@ int main(int argc, char *argv[]){
 									//	k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, /*apice2.etiqueta, */segmento.etiqueta);
 									intersecciones++;			
 								}
-
 							}
 							// Se cuenta cuantos segmentos intersectaron a la k13 y apice o
 							//fprintf(log, "%d segmentos intersectaron al k1-3 %s %s %s con apice2 %c\n", intersecciones, k1_3.s1.etiqueta, k1_3.s2.etiqueta, k1_3.s3.etiqueta, apice2.etiqueta);
@@ -171,18 +164,6 @@ int main(int argc, char *argv[]){
 									else if(intersecciones >= 3) ncrossings+= 10;
 									break;
 							}
-							/*
-							if(n == 8 && intersecciones > 0){
-								ncrossings++;
-							}
-							else if(n == 9){
-								if(intersecciones == 1) ncrossings+=3;
-								else if(intersecciones >= 2) ncrossings+=4;
-								//else if(intersecciones >= 3) ncrossings+=10;
-							}
-							else if(n == 10)
-							*/
-							//fprintf(log, "se selecciono %c como apice2\n", apice2.etiqueta);
 						}
 					}
 				}
@@ -190,10 +171,12 @@ int main(int argc, char *argv[]){
 			}
 		}
 		//fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
+		
 		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
-		if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
-		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
+		//if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
+		//if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		//return 0;
 	}
+	printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
 	return 0;
 }

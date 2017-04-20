@@ -87,9 +87,16 @@ void dibuja() {
 }
 
 int cantidad_intersecting_families(){
-	FILE *file = fopen("intersecting_families/K2/logK2-8lista", "r");
+	FILE *file;// = fopen("intersecting_families/K2/logK2-8lista", "r");
 	int id, cantidad;
 	char ch;
+
+	switch(n){
+		case 6: file = fopen("intersecting_families/K2/logK2-6lista", "r"); break;
+		case 8: file = fopen("intersecting_families/K2/logK2-8lista", "r"); break;
+		case 9: file = fopen("intersecting_families/K2/logK2-9lista", "r"); break;
+		case 10: file = fopen("intersecting_families/K2/logK2-10lista", "r"); break;
+	}
 
 	if(file == NULL) return -1;
 
@@ -103,7 +110,7 @@ int cantidad_intersecting_families(){
 
 
 void genera_arreglo_de_if(int nif){
-	FILE *log = fopen("intersecting_families/K2/if8", "r");
+	FILE *log = fopen("intersecting_families/K2/ifn", "r");
 	ifamilies = (char **)malloc(sizeof(char*)*nif);
 
 	for(int i = 0; i < nif; i++){
@@ -144,8 +151,15 @@ void procesa_puntos(){
 		}	
 	}
 
-	log = fopen("intersecting_families/K2/if8", "w");
-	n8(segmentos, nsegmentos, log);
+	log = fopen("intersecting_families/K2/ifn", "w");
+	
+	switch(n){
+		case 6: n6(segmentos, nsegmentos, log); break;
+		case 8: n8(segmentos, nsegmentos, log); break;
+		case 9: n9(segmentos, nsegmentos, log); break;
+		case 10: n10(segmentos, nsegmentos, log); break;
+	}
+
 	fclose(log);
 	genera_arreglo_de_if(nintersecting_families);
 
@@ -300,13 +314,15 @@ int main(int argc, char *argv[]){
 	int i, l, bytes, npuntos, inicio, kotypes;
 	char order_type[50], etiqueta;
 	
-	if(argc < 1){
-		printf("Se necesita el valor de n y otype como argumentos\n");
-		return -1;
-	}
+	//if(argc < 1){
+	//	printf("Se necesita el valor de n y otype como argumentos\n");
+	//	return -1;
+	//}
 	
-	n = atoi(argv[1]);
+	//n = atoi(argv[1]);
 	
+	printf("n: "); scanf("%d", &n);
+
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
 		case 4: strcpy(order_type, "order_types/otypes04.b08"); otypes = 2; bytes = 1; nsegmentos = 6; break;

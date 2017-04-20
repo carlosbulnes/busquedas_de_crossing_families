@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 	strcat(order_type, cadena);
 	strcat(order_type, "s");
 
-	FILE *log = fopen(order_type, "a");
+	FILE *log = fopen(order_type, "w");
 	
 	if(file == NULL){
 		printf("No se puede abrir archivo\n");
@@ -89,7 +89,12 @@ int main(int argc, char *argv[]){
 		}
 
 		switch(n){
-			case 8: 
+			case 6:
+				cont = n6(segmentos, nsegmentos, log);
+				fprintf(log, "%d: %d\n", (l/n)+1, cont);
+				//if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
+				break;			
+			case 8:
 				cont = n8(segmentos, nsegmentos, log);
 				fprintf(log, "%d: %d\n", (l/n)+1, cont);
 				if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
