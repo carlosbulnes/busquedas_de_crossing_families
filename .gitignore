@@ -2,6 +2,7 @@ order_types/
 prog
 dibuja
 lee_otype
-crossing_families/log*
+crossing_families/log/*
 thrakles/log/*
 crossing_number/crossing
+otros_datos/cierres_convexos/
