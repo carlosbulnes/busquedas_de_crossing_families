@@ -1,0 +1,33 @@
+carlos:crossing_families$ tail 2k2-9min 
+151152: 961
+
+carlos:crossing_families$ tail 2k2-8min 
+2988: 103
+
+carlos:crossing_families$ ./lee_logs /home/carlos/Downloads/r8
+Maximo otype 1 con 70 Crossing Families
+Minimo otype 2991 con 19 Crossing Families
+
+carlos:crossing_families$ ./lee_logs /home/carlos/Downloads/r9
+Maximo otype 1 con 126 Crossing Families
+Minimo otype 151148 con 36 Crossing Families
+carlos:crossing_families$ 
+
+N = 10
+Maximo otype 1 con 10845 Crossing Families
+Minimo otype 13413894 con 4905 Crossing Families
+Tiempo transcurrido: 83881.245016
+
+
+
+2K2 con n = 8 tarda 1.777785 segundos
+2K2 con n = 9 tarda 330.790154 segundos
+
+
+K13 con n = 8 tarda 2.146709 segundos
+K13 con n = 9 tarda 277.478612 segundos
+K13 con n = 10 tarda  segundos
+
+2K con n = 8 tarda 8.974019 segundos
+2K con n = 9 tarda 1556.860738 segundos
+2K con n = 10 tarda segundos
