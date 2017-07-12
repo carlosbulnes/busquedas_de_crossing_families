@@ -233,7 +233,7 @@ int main(int argc, char *argv[]){
 	puntos_otype = (Puntof*)malloc(sizeof(Puntof)*n);
 
   	// Lectura del archivo de la base de datos
-	etiqueta = 'A';
+	etiqueta = '1';
 	for(i = 0; i < npuntos;){
 		fread(&a, bytes, 1, file);
 		fread(&b, bytes, 1, file);
@@ -245,7 +245,7 @@ int main(int argc, char *argv[]){
 
 		etiqueta += 1;
 		i++;
-		if(i % n == 0) etiqueta = 'A';
+		if(i % n == 0) etiqueta = '1';
 	}
 	fclose(file);
 

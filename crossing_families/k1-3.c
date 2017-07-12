@@ -104,12 +104,14 @@ int main(int argc, char *argv[]){
 				k1_3.s1.b = puntos[l+j];
 				k1_3.s1.etiqueta[1] = puntos[l+j].etiqueta;
 
+				// Selecciona el segundo segmentos de la k1.3
 				for(k = j+1; k < n; k++){
 					if(puntos_iguales(puntos[l+k], apice)) continue;
 
 					k1_3.s2.b = puntos[l+k];
 					k1_3.s2.etiqueta[1] = puntos[l+k].etiqueta;
 
+					// Selecciona el tercer segmentos de la k1.3
 					for(m = k+1; m < n; m++){
 						if(puntos_iguales(puntos[l+m], apice)) continue;
 
@@ -171,8 +173,7 @@ int main(int argc, char *argv[]){
 			}
 		}
 		//fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
-		
-		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings);
+		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings/2);
 		//if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
 		//if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		//return 0;
