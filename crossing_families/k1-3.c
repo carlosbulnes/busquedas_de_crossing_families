@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 	strcpy(order_type, "crossing_families/logk1-3-");
 	strcat(order_type, argv[1]);
 
-	FILE *log = fopen(order_type, "w");
+	FILE *log = fopen(order_type, "a");
 	
 	npuntos = otypes*n;
 

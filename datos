@@ -31,3 +31,16 @@ K13 con n = 10 tarda  segundos
 2K con n = 8 tarda 8.974019 segundos
 2K con n = 9 tarda 1556.860738 segundos
 2K con n = 10 tarda segundos
+
+
+K13
+1 - 1000000 4399.825584 segundos
+1000001 - 3000000 9459.569582 segundos
+3000001 - 5000000 9193.378252 segundos
+5000001 - 7000000 9042.380005 segundos
+7000001 - 10000000 13819.213515 seg
+10000001 - 14309547 20010.422118 seg
+
+carlos:crossing_families$ ./lee_logs logk1-3-10 
+Maximo otype 1 con 22320 Crossing Families
+Minimo otype 13413894 con 12862 Crossing Families
