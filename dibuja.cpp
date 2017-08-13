@@ -201,14 +201,11 @@ int main(int argc, char *argv[]){
 	
 	int i, l, bytes, npuntos, inicio, kotypes;
 	char order_type[50], etiqueta;
-	
-	if(argc < 1){
-		printf("Se necesita el valor de n y otype como argumentos\n");
-		return -1;
-	}
-	
-	n = atoi(argv[1]);
-	
+		
+	do{
+		printf("n: "); scanf("%d", &n);
+	}while(n < 3 || n > 10);
+
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; break;
 		case 4: strcpy(order_type, "order_types/otypes04.b08"); otypes = 2; bytes = 1; break;

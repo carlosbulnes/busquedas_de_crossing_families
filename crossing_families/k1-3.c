@@ -13,18 +13,15 @@ typedef struct k13{
 
 int main(int argc, char *argv[]){
 	int n, i, j, k, l, m, o, p, npuntos, otypes, bytes, nk1_3, notypes, intersecciones, ncrossings, inicio, kotypes;
-	char order_type[50], etiqueta;
+	char order_type[50], etiqueta, nchar[3];
 	Punto apice, apice2;
 	K1_3 k1_3;
 	Segmento segmento;
 	uint16_t a, b;
 
-	if(argc < 2){
-		printf("Se necesita el valor de n como argumento\n");
-		return -1;
-	}
-	
-	n = atoi(argv[1]);
+	do{
+		printf("n: "); scanf("%d", &n);
+	}while(n < 3 || n > 10);
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; break;
@@ -38,11 +35,18 @@ int main(int argc, char *argv[]){
 	}
 
 	FILE *file = fopen(order_type, "rb");
-
 	strcpy(order_type, "crossing_families/logk1-3-");
-	strcat(order_type, argv[1]);
-
-	FILE *log = fopen(order_type, "a");
+	sprintf(nchar, "%d", n);
+	strcat(order_type, nchar);
+	
+	FILE *log = fopen(order_type, "r");
+	if(log == NULL){
+		log = fopen(order_type, "w");
+	}
+	else{
+		fclose(log);
+		log = fopen(order_type, "a");		
+	}
 	
 	npuntos = otypes*n;
 
@@ -174,6 +178,7 @@ int main(int argc, char *argv[]){
 		}
 		//fprintf(log, "Total k1_3: %d, %d CF en otype %d\n", nk1_3, ncrossings, (l/n)+1);
 		fprintf(log, "%d: %d\n", (l/n)+1, ncrossings/2);
+		//printf("%d: %d\n", (l/n)+1, ncrossings/2);
 		//if(ncrossings > 50400) printf("%d CF en otype %d\n", ncrossings, (l/n)+1);
 		//if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 		//return 0;

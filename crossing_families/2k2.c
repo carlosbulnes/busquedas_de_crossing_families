@@ -13,14 +13,11 @@ int main(int argc, char *argv[]){
 	
 	int n, otypes, c = 1, i, j, k, l, m, bytes, nsegmentos, npuntos, inicio, kotypes;
 	int crossings = 0, ncrossings = 0, siempre_existe = 1, n2k2;
-	char order_type[50], etiqueta;
+	char order_type[50], etiqueta, nchar[3];
 
-	if(argc < 2){
-		printf("Se necesita el valor de n como argumento\n");
-		return -1;
-	}
-	
-	n = atoi(argv[1]);
+	do{
+		printf("n: "); scanf("%d", &n);
+	}while(n < 3 || n > 10);
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
@@ -35,8 +32,18 @@ int main(int argc, char *argv[]){
 
 	FILE *file = fopen(order_type, "rb");
 	strcpy(order_type, "crossing_families/log2k2-");
-	strcat(order_type, argv[1]);
-	FILE *log = fopen(order_type, "w");
+	sprintf(nchar, "%d", n);
+	strcat(order_type, nchar);
+	
+	FILE *log = fopen(order_type, "r");
+	if(log == NULL){
+		log = fopen(order_type, "w");
+	}
+	else{
+		fclose(log);
+		log = fopen(order_type, "a");		
+	}
+
 	uint16_t a, b;
 	npuntos = otypes*n;
 
@@ -101,10 +108,9 @@ int main(int argc, char *argv[]){
 			}
 		}
 
-		//printf("hay %d 2k2 que no comparten punto\n", k); //return 0;
 		n2k2 = k;
+		//double prom = 0, con = 0;
 		crossings = 0;
-
 		for(i = 0; i < n2k2; i++){
 			for(j = i+1; j < n2k2; j++){
 				//clock_t start = clock();
@@ -115,78 +121,20 @@ int main(int argc, char *argv[]){
 						//fprintf(log, "%s%s\n", a2k2[j].s1.etiqueta, a2k2[j].s2.etiqueta);
 					}
 				}
-				//printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC); return 0;
+				/*
+				clock_t stop = clock();
+				double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
+    			prom += elapsed;
+    			con += 1.0;
+    			*/		
 			}
 		}
-
-		/*
-		// Imprime los puntos del order type
-		printf("--------------------otype %d-----------------------\n", (l/n)+1);
-		for(i = l; i < (l+n); i++){
-			printf("%c: (%d, %d) ", puntos[i].etiqueta, puntos[i].x, puntos[i].y);	
-		}
-		printf("\n");
-		*/
-		//printf("--------------------otype %d-----------------------\n", (l/n)+1);
-		/*
-		for(i = 0; i < nsegmentos; i++){
-			srojos[0] = segmentos[i];
-			
-			// Busca la pareja del segmento rojo
-			for(j = i; j < nsegmentos; j++){
-				if(!comparten_punto(srojos[0],segmentos[j])){
-					// Encuentra la pareja roja
-					srojos[1] = segmentos[j];
-
-					// Busca los segmentos azules
-					for(k = 0; k < nsegmentos; k++){
-						if(strcmp(segmentos[k].etiqueta, srojos[0].etiqueta) == 0 || strcmp(segmentos[k].etiqueta, srojos[1].etiqueta) == 0
-							|| comparten_punto(segmentos[k], srojos[0]) || comparten_punto(segmentos[k], srojos[1])){
-							continue;
-						}
-						
-						// Determina el primer segmento azul
-						sazules[0] = segmentos[k];
-						
-						// Busca pareja del segmento azul
-						for(m = k; m < nsegmentos; m++){
-							if(!comparten_punto(sazules[0], segmentos[m]) && !comparten_punto(segmentos[m], srojos[0]) && !comparten_punto(segmentos[m], srojos[1])
-								&& strcmp(segmentos[m].etiqueta, srojos[0].etiqueta) != 0 && strcmp(segmentos[m].etiqueta, srojos[1].etiqueta) != 0){
-								// Pareja azul encontrada
-								sazules[1] = segmentos[m];
-
-								// Verifica si algun segmento rojo intersecta a algun segmento azul
-								if(interseccion(srojos[0], sazules[0]) || interseccion(srojos[0], sazules[1])
-									|| interseccion(srojos[1], sazules[0]) || interseccion(srojos[1], sazules[1])){
-									
-									crossings++;
-									
-									//fprintf(log, "Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
-									fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
-									fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);
-									
-									//fprintf(log, "Azules: %s y %s\n", sazules[0].etiqueta, sazules[1].etiqueta);
-								}
-									//fprintf(log, "%c%c%c%c", srojos[0].etiqueta[0], srojos[0].etiqueta[1], srojos[1].etiqueta[0], srojos[1].etiqueta[1]);
-									//fprintf(log, "%c%c%c%c\n", sazules[0].etiqueta[0], sazules[0].etiqueta[1], sazules[1].etiqueta[0], sazules[1].etiqueta[1]);								
-								/*else{
-									printf("Rojos: %s y %s, ", srojos[0].etiqueta, srojos[1].etiqueta);
-									
-									printf("Azules: %s y %s no son CF\n", sazules[0].etiqueta, sazules[1].etiqueta);
-
-									getchar();
-									getchar();
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		*/
+		//printf("cont: %f\n", con);
+		//printf("tiempo promedio: %.12f s\n", (prom/con)/1000.0); return 0;
 		ncrossings += crossings;
 		fprintf(log, "%d: %d\n", (l/n)+1, crossings);
-		if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
+		//printf("%d: %d\n", (l/n)+1, crossings);
+		//if(((l/n)+1) % 500000 == 0) printf("%d/%d\n", (l/n)+1, otypes);
 	}
 
 	printf("Tiempo transcurrido: %f\n", ((double)clock() - start) / CLOCKS_PER_SEC);
