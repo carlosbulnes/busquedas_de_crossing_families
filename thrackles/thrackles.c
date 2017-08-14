@@ -2,23 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "thrakles.h"
+#include "../base_de_datos.h"
+#include "thrackles.h"
 
 int main(int argc, char *argv[]){
 	
-	/*
-	if(argc < 2){
-		printf("Se necesita el valor de n como argumento\n");
-		return -1;
-	}
-	*/
-
 	int n, otypes, bytes, npuntos, i, j, k, l, inicio, kotypes, nsegmentos, cont, err;
 	char order_type[50], etiqueta, cadena[3];
 	uint16_t a, b; 
 
-	//n = atoi(argv[1]);
-	printf("valor de n: "); err = scanf("%d", &n);
+	do{
+		printf("n: "); scanf("%d", &n);
+	}while(n < 8 || n > 10);
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
@@ -31,14 +26,24 @@ int main(int argc, char *argv[]){
 		case 10: strcpy(order_type, "order_types/otypes10.b16"); otypes = 14309547; bytes = 2; nsegmentos = 45; break;
 	}
 
+	verifica_base_datos(n, order_type);
+
 	FILE *file = fopen(order_type, "rb");
 
-	strcpy(order_type, "intersecting_families/K2/logK2-");
+	strcpy(order_type, "thrackles/logthrackle-");
 	sprintf(cadena, "%d", n);
 	strcat(order_type, cadena);
 	strcat(order_type, "s");
 
-	FILE *log = fopen(order_type, "w");
+	FILE *log = fopen(order_type, "r");
+	
+	if(log == NULL){
+		log = fopen(order_type, "w");
+	}
+	else{
+		fclose(log);
+		log = fopen(order_type, "a");		
+	}
 	
 	if(file == NULL){
 		printf("No se puede abrir archivo\n");
@@ -107,7 +112,6 @@ int main(int argc, char *argv[]){
 			case 10:
 				cont = n10(segmentos, nsegmentos, log);
 				fprintf(log, "%d: %d\n", (l/n)+1, cont);
-
 				break;
 		}
 	}

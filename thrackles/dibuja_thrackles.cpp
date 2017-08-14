@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdint.h>
 #include <GL/glut.h>
-#include "thrakles.h"
+#include "../base_de_datos.h"
+#include "dibuja_thrackles.h"
 
 typedef struct {
 	char etiqueta;
@@ -17,7 +18,7 @@ Segmento *segmentos;
 FILE *log;
 char **ifamilies;
 int n, ancho = 1000, alto = 800;
-char buffer[20]="", textos[50] = "Otype: 1", textos2[50] = "Int. Family 1", buffer2[20];
+char buffer[20]="", textos[50] = "Otype: 1", textos2[50] = "Thrackle 1", buffer2[20];
 int otype = 1, otypes, nsegmentos, kint_fam = 1, nintersecting_families = 0;
 
 void reshape_cb (int w, int h) {
@@ -69,7 +70,7 @@ void dibuja() {
 		}
 	}else{
 		for(i = 0; i < n; i++){
-			strcpy(textos2, "Int. Family 0");
+			strcpy(textos2, "Thrackle 0");
 			for(int j = i+1; j < n; j++){
 				glBegin(GL_LINE_STRIP);
 				glVertex2i(puntos_otype[i].x, puntos_otype[i].y);
@@ -92,10 +93,10 @@ int cantidad_intersecting_families(){
 	char ch;
 
 	switch(n){
-		case 6: file = fopen("thrakles/log/logK2-6lista", "r"); break;
-		case 8: file = fopen("thrakles/log/logK2-8lista", "r"); break;
-		case 9: file = fopen("thrakles/log/logK2-9lista", "r"); break;
-		case 10: file = fopen("thrakles/log/logK2-10lista", "r"); break;
+		case 6: file = fopen("thrackles/log/logK2-6lista", "r"); break;
+		case 8: file = fopen("thrackles/log/logK2-8lista", "r"); break;
+		case 9: file = fopen("thrackles/log/logK2-9lista", "r"); break;
+		case 10: file = fopen("thrackles/log/logK2-10lista", "r"); break;
 	}
 
 	if(file == NULL) return -1;
@@ -110,7 +111,7 @@ int cantidad_intersecting_families(){
 
 
 void genera_arreglo_de_if(int nif){
-	FILE *log = fopen("thrakles/log/thrakle_n", "r");
+	FILE *log = fopen("thrackles/log/thrakle_n", "r");
 	ifamilies = (char **)malloc(sizeof(char*)*nif);
 
 	for(int i = 0; i < nif; i++){
@@ -122,7 +123,6 @@ void genera_arreglo_de_if(int nif){
 	}
 
 	fclose(log);
-	//printf("%s\n", ifamilies[0]);
 }
 
 void procesa_puntos(){
@@ -151,7 +151,7 @@ void procesa_puntos(){
 		}	
 	}
 
-	log = fopen("thrakles/log/thrakle_n", "w");
+	log = fopen("thrackles/log/thrakle_n", "w");
 	
 	switch(n){
 		case 6: n6(segmentos, nsegmentos, log); break;
@@ -204,7 +204,7 @@ void keyboard(unsigned char key, int x, int y){
 		if(otype > 0 && otype <= otypes){
 			kint_fam = 1;
 			procesa_puntos();
-			strcpy(textos2, "Int. Family ");
+			strcpy(textos2, "Thrackle ");
 			sprintf(buffer2, "%d", kint_fam);
 			strcat(textos2, buffer2);
 			strcat(textos2, "/");
@@ -218,7 +218,7 @@ void keyboard(unsigned char key, int x, int y){
 		if(k > 0 && k <= nintersecting_families){
 			kint_fam = k;
 			procesa_puntos();
-			strcpy(textos2, "Int. Family ");
+			strcpy(textos2, "Thrackle ");
 			sprintf(buffer2, "%d", kint_fam);
 			strcat(textos2, buffer2);
 			strcat(textos2, "/");
@@ -286,7 +286,7 @@ void special(int key, int x, int y){
 	strcpy(textos, "Otype: ");
 	sprintf(buffer2, "%d", otype);
 	strcat(textos, buffer2);	
-	strcpy(textos2, "Int. Family ");
+	strcpy(textos2, "Thrackle ");
 	sprintf(buffer2, "%d", kint_fam);
 	strcat(textos2, buffer2);	
 	strcat(textos2, "/");
@@ -314,14 +314,9 @@ int main(int argc, char *argv[]){
 	int i, l, bytes, npuntos, inicio, kotypes;
 	char order_type[50], etiqueta;
 	
-	//if(argc < 1){
-	//	printf("Se necesita el valor de n y otype como argumentos\n");
-	//	return -1;
-	//}
-	
-	//n = atoi(argv[1]);
-	
-	printf("n: "); scanf("%d", &n);
+	do{
+		printf("n: "); scanf("%d", &n);
+	}while(n < 8 || n > 10);
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
@@ -334,6 +329,8 @@ int main(int argc, char *argv[]){
 		case 10: strcpy(order_type, "order_types/otypes10.b16"); otypes = 14309547; bytes = 2; nsegmentos = 45; break;
 	}
 	
+	verifica_base_datos(n, order_type);
+
 	FILE *file = fopen(order_type, "r");
 	uint16_t a = 0, b = 0;
 	

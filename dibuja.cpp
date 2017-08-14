@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <GL/glut.h>
+#include "base_de_datos.h"
 
 typedef struct punto{
 	char etiqueta;
@@ -216,6 +217,8 @@ int main(int argc, char *argv[]){
 		case 9: strcpy(order_type, "order_types/otypes09.b16"); otypes = 158817; bytes = 2; break;
 		case 10: strcpy(order_type, "order_types/otypes10.b16"); otypes = 14309547; bytes = 2; break;
 	}
+
+	verifica_base_datos(n, order_type);
 	
 	FILE *file = fopen(order_type, "r");
 	uint16_t a = 0, b = 0;

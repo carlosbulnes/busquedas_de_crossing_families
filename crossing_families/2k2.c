@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "../base_de_datos.h"
 #include "geom.h"
+
 
 typedef struct k2{
 	Segmento s1;
@@ -17,7 +19,8 @@ int main(int argc, char *argv[]){
 
 	do{
 		printf("n: "); scanf("%d", &n);
-	}while(n < 3 || n > 10);
+	}while(n < 8 || n > 10);
+
 
 	switch(n){
 		case 3: strcpy(order_type, "order_types/otypes03.b08"); otypes = 1; bytes = 1; nsegmentos = 3; break;
@@ -29,6 +32,8 @@ int main(int argc, char *argv[]){
 		case 9: strcpy(order_type, "order_types/otypes09.b16"); otypes = 158817; bytes = 2; nsegmentos = 36; n2k2 = 630; break;
 		case 10: strcpy(order_type, "order_types/otypes10.b16"); otypes = 14309547; bytes = 2; nsegmentos = 45; n2k2 = 990; break;
 	}
+
+	verifica_base_datos(n, order_type);
 
 	FILE *file = fopen(order_type, "rb");
 	strcpy(order_type, "crossing_families/log2k2-");
