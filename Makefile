@@ -8,7 +8,7 @@ thrackle:
 	clear && gcc thrackles/thrackles.c -o prog -lcurl -O2 && ./prog
 
 dotypes:
-	g++ dibuja.cpp -lglut -lGL -lGLU -lcurl -o dibuja && ./dibuja
+	g++ dibuja.cpp gl2ps.c -lglut -lGL -lGLU -lcurl -lX11 -lm -o dibuja && ./dibuja
 
 dthrackles:
 	g++ thrackles/dibuja_thrackles.cpp -lglut -lGL -lGLU -lcurl -o dibuja && ./dibuja

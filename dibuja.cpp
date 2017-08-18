@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <GL/glut.h>
+#include "gl2ps.h"
 #include "base_de_datos.h"
 
 typedef struct punto{
@@ -22,6 +23,7 @@ Puntof *puntos_otype;
 int n, ancho = 1000, alto = 800;
 char buffer[20]="", textos[50] = "Otype 1", buffer2[20];
 int otype = 1, otypes;
+
 
 void reshape_cb (int w, int h) {
 	if (w==0||h==0) return;
@@ -139,6 +141,34 @@ void keyboard(unsigned char key, int x, int y){
 		strcpy(buffer, "");
 	}
 
+	if(key == 'p'){
+		FILE *fp;
+ 	 	int state = GL2PS_OVERFLOW, buffsize = 0;
+ 	 	char nombre_archivo[50] = "n", ruta[50] = "pdfs/";
+ 	 	char temp_char[15];
+
+ 	 	sprintf(temp_char, "%d", n);
+ 	 	strcat(nombre_archivo, temp_char);
+ 	 	strcat(nombre_archivo, "_otype");
+ 	 	sprintf(temp_char, "%d", otype);
+ 	 	strcat(nombre_archivo, temp_char);
+ 	 	strcat(nombre_archivo, ".pdf");
+ 	 	strcat(ruta, nombre_archivo);
+
+		fp = fopen(ruta, "wb");
+    	printf("Imprimiendo a archivo %s\n", ruta);
+    	while(state == GL2PS_OVERFLOW){
+      		buffsize += 1024*1024;
+      		gl2psBeginPage("pdf", "gl2psTestSimple", NULL, GL2PS_PDF/*GL2PS_EPS*/, GL2PS_SIMPLE_SORT,
+                     GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT,
+                     GL_RGBA, 0, NULL, 0, 0, 0, buffsize, fp, nombre_archivo);
+      		dibuja();
+      		state = gl2psEndPage();
+    	}
+    	fclose(fp);
+    	printf("PDF generado\n");
+	}
+
 	int len = strlen(buffer);
 	// Verifica que el string de buffer no esté lleno y que esté ingresando solo numeros
 	if(len < 20 && (key >=48 && key <=57)){
@@ -146,7 +176,7 @@ void keyboard(unsigned char key, int x, int y){
 		buffer[len+1] = '\0';
 		strcpy(textos, "Otype: ");
 		strcat(textos, buffer);
-	}	
+	}
 	
 	glutPostRedisplay();
 }
