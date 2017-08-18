@@ -7,13 +7,13 @@
 #include "base_de_datos.h"
 
 typedef struct punto{
-	char etiqueta;
+	char etiqueta[3];
 	uint16_t x;
 	uint16_t y;
 }Punto;
 
 typedef struct {
-	char etiqueta;
+	char etiqueta[3];
 	float x;
 	float y;
 }Puntof;
@@ -21,7 +21,7 @@ typedef struct {
 Punto *puntos;
 Puntof *puntos_otype;
 int n, ancho = 1000, alto = 800;
-char buffer[20]="", textos[50] = "Otype 1", buffer2[20];
+char buffer[20]="", textos[50] = "1", buffer2[20];
 int otype = 1, otypes;
 
 
@@ -39,9 +39,10 @@ void print(int x, int y, char *string){
 	glRasterPos2f(x,y);
 	
 	int len = strlen(string);
+	gl2psTextOpt(string, "Courier", 12, GL2PS_TEXT_BL, 0);
 
 	for (int i = 0; i < len; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,string[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,string[i]);
 	}
 }
 
@@ -49,10 +50,11 @@ void dibuja() {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	print(ancho-200,alto-50,textos);
+	print(ancho-130,alto-60,textos);
 
 	glColor3f(0.0, 0.0, 1.0);
 	glPointSize(5);
+	gl2psPointSize(5);
 	glBegin(GL_POINTS);
 	for(i = 0; i < n; i++){
 		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
@@ -61,12 +63,12 @@ void dibuja() {
 
 	glColor3f(1.0, 0.0, 0.0);
 	for(i = 0; i < n; i++){
-		glRasterPos2f(puntos_otype[i].x, puntos_otype[i].y);
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, puntos_otype[i].etiqueta);
+		print(puntos_otype[i].x, puntos_otype[i].y, puntos_otype[i].etiqueta);
 	}
 	
 	glColor3f(.5,.5,.5);
 	glLineWidth(.2);
+	gl2psLineWidth(.2);
 	for(i = 0; i < n; i++){
 		for(int j = i+1; j < n; j++){
 			glBegin(GL_LINE_STRIP);
@@ -85,7 +87,7 @@ void procesa_puntos(){
 	l = (otype - 1) * n;
 
 	for(i = 0; i < n; i++){
-		puntos_otype[i].etiqueta = puntos[l+i].etiqueta;
+		strcpy(puntos_otype[i].etiqueta, puntos[l+i].etiqueta);
 		puntos_otype[i].x = puntos[l+i].x;
 		puntos_otype[i].y = puntos[l+i].y;
 	}
@@ -159,9 +161,9 @@ void keyboard(unsigned char key, int x, int y){
     	printf("Imprimiendo a archivo %s\n", ruta);
     	while(state == GL2PS_OVERFLOW){
       		buffsize += 1024*1024;
-      		gl2psBeginPage("pdf", "gl2psTestSimple", NULL, GL2PS_PDF/*GL2PS_EPS*/, GL2PS_SIMPLE_SORT,
+      		gl2psBeginPage(" ", " ", NULL, GL2PS_PDF, GL2PS_SIMPLE_SORT,
                      GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT,
-                     GL_RGBA, 0, NULL, 0, 0, 0, buffsize, fp, nombre_archivo);
+                     GL_RGBA, 0, NULL, 0, 0, 0, buffsize, fp, NULL);
       		dibuja();
       		state = gl2psEndPage();
     	}
@@ -174,7 +176,7 @@ void keyboard(unsigned char key, int x, int y){
 	if(len < 20 && (key >=48 && key <=57)){
 		buffer[len] = key;
 		buffer[len+1] = '\0';
-		strcpy(textos, "Otype: ");
+		strcpy(textos, " ");
 		strcat(textos, buffer);
 	}
 	
@@ -186,7 +188,7 @@ void special(int key, int x, int y){
 		if(otype > 1){
 			otype--;
 			procesa_puntos();
-			strcpy(textos, "Otype: ");
+			strcpy(textos, " ");
 			sprintf(buffer2, "%d", otype);
 			strcat(textos, buffer2);
 		}
@@ -195,20 +197,20 @@ void special(int key, int x, int y){
 		if(otype < otypes){
 			otype++;
 			procesa_puntos();
-			strcpy(textos, "Otype: ");
+			strcpy(textos, " ");
 			sprintf(buffer2, "%d", otype);
 			strcat(textos, buffer2);
 		}
 	}else if(key == GLUT_KEY_END){
 		otype = otypes;
 		procesa_puntos();
-		strcpy(textos, "Otype: ");
+		strcpy(textos, " ");
 		sprintf(buffer2, "%d", otype);
 		strcat(textos, buffer2);		
 	}else if(key == GLUT_KEY_HOME){
 		otype = 1;
 		procesa_puntos();
-		strcpy(textos, "Otype: ");
+		strcpy(textos, " ");
 		sprintf(buffer2, "%d", otype);
 		strcat(textos, buffer2);		
 	}
@@ -230,8 +232,8 @@ void inicializa_opengl(){
 
 int main(int argc, char *argv[]){
 	
-	int i, l, bytes, npuntos, inicio, kotypes;
-	char order_type[50], etiqueta;
+	int i, k = 1, bytes, npuntos, inicio, kotypes;
+	char order_type[50], etiqueta[3];
 		
 	do{
 		printf("n: "); scanf("%d", &n);
@@ -263,19 +265,16 @@ int main(int argc, char *argv[]){
 	puntos_otype = (Puntof*)malloc(sizeof(Puntof)*n);
 
   	// Lectura del archivo de la base de datos
-	etiqueta = '1';
-	for(i = 0; i < npuntos;){
+	for(i = 0; i < npuntos; i++, k++){
 		fread(&a, bytes, 1, file);
 		fread(&b, bytes, 1, file);
 
-		//printf("Leidos %d %d\n", a, b); getchar();
-		puntos[i].etiqueta = etiqueta;
+		sprintf(etiqueta, "%d", k);
+		strcpy(puntos[i].etiqueta, etiqueta);
 		puntos[i].x = a;
 		puntos[i].y = b;
 
-		etiqueta += 1;
-		i++;
-		if(i % n == 0) etiqueta = '1';
+		if(k % n == 0) k = 0;
 	}
 	fclose(file);
 
