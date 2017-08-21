@@ -141,9 +141,7 @@ void keyboard(unsigned char key, int x, int y){
 		if(otype > 0 && otype <= otypes)
 			procesa_puntos();
 		strcpy(buffer, "");
-	}
-
-	if(key == 'p'){
+	}else if(key == 'p'){
 		FILE *fp;
  	 	int state = GL2PS_OVERFLOW, buffsize = 0;
  	 	char nombre_archivo[50] = "n", ruta[50] = "pdfs/";

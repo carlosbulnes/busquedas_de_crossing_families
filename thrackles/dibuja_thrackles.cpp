@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <GL/glut.h>
 #include "../base_de_datos.h"
+#include "../gl2ps.h"
 #include "dibuja_thrackles.h"
 
 typedef struct {
@@ -16,10 +17,10 @@ Punto *puntos;
 Puntof *puntos_otype;
 Segmento *segmentos;
 FILE *log;
-char **ifamilies;
+char **thrackles;
 int n, ancho = 1000, alto = 800;
 char buffer[20]="", textos[50] = "Otype: 1", textos2[50] = "Thrackle 1", buffer2[20];
-int otype = 1, otypes, nsegmentos, kint_fam = 1, nintersecting_families = 0;
+int otype = 1, otypes, nsegmentos, kthrackle = 1, nthrackles = 0;
 
 void reshape_cb (int w, int h) {
 	if (w==0||h==0) return;
@@ -35,9 +36,10 @@ void print(int x, int y, char *string){
 	glRasterPos2f(x,y);
 	
 	int len = strlen(string);
+	gl2psTextOpt(string, "Courier", 12, GL2PS_TEXT_BL, 0);
 
 	for (int i = 0; i < len; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,string[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,string[i]);
 	}
 }
 
@@ -47,6 +49,7 @@ void dibuja() {
 
 	glColor3f(0.0, 0.0, 1.0);
 	glPointSize(5);
+	gl2psPointSize(5);
 	glBegin(GL_POINTS);
 	for(i = 0; i < n; i++){
 		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
@@ -61,11 +64,11 @@ void dibuja() {
 
 	glColor3f(.5,.5,.5);
 	glLineWidth(.2);
-	if(nintersecting_families > 0){
+	if(nthrackles > 0){
 		for(i = 0; i < n*2; i+=2){
 			glBegin(GL_LINE_STRIP);
-			glVertex2i(puntos_otype[(int)(ifamilies[kint_fam-1][i]) - 49].x, puntos_otype[(int)(ifamilies[kint_fam-1][i]) - 49].y);
-			glVertex2i(puntos_otype[(int)(ifamilies[kint_fam-1][i+1]) - 49].x, puntos_otype[(int)(ifamilies[kint_fam-1][i+1]) - 49].y);
+			glVertex2i(puntos_otype[(int)(thrackles[kthrackle-1][i]) - 49].x, puntos_otype[(int)(thrackles[kthrackle-1][i]) - 49].y);
+			glVertex2i(puntos_otype[(int)(thrackles[kthrackle-1][i+1]) - 49].x, puntos_otype[(int)(thrackles[kthrackle-1][i+1]) - 49].y);
 			glEnd();
 		}
 	}else{
@@ -87,7 +90,7 @@ void dibuja() {
 	glutSwapBuffers();
 }
 
-int cantidad_intersecting_families(){
+int numero_thrackles(){
 	FILE *file;// = fopen("intersecting_families/K2/logK2-8lista", "r");
 	int id, cantidad;
 	char ch;
@@ -110,16 +113,16 @@ int cantidad_intersecting_families(){
 }
 
 
-void genera_arreglo_de_if(int nif){
+void genera_arreglo_de_thrackles(int nthrackles){
 	FILE *log = fopen("thrackles/log/thrakle_n", "r");
-	ifamilies = (char **)malloc(sizeof(char*)*nif);
+	thrackles = (char **)malloc(sizeof(char*)*nthrackles);
 
-	for(int i = 0; i < nif; i++){
-		ifamilies[i] = (char*)malloc(sizeof(char)*20);
+	for(int i = 0; i < nthrackles; i++){
+		thrackles[i] = (char*)malloc(sizeof(char)*20);
 	}
 
-	for(int i = 0; i < nif; i++){
-		fscanf(log, "%s", ifamilies[i]);
+	for(int i = 0; i < nthrackles; i++){
+		fscanf(log, "%s", thrackles[i]);
 	}
 
 	fclose(log);
@@ -137,9 +140,7 @@ void procesa_puntos(){
 		puntos_otype[i].y = puntos[l+i].y;
 	}
 
-	nintersecting_families = cantidad_intersecting_families();
-	//printf("numero de IF: %d\n", nintersecting_families);
-
+	nthrackles = numero_thrackles();
 	for(i = l, k = 0; i < (l+n); i++){
 		for(int j = i+1; j < (l+n); j++){
 			segmentos[k].a = puntos[i];
@@ -161,7 +162,7 @@ void procesa_puntos(){
 	}
 
 	fclose(log);
-	genera_arreglo_de_if(nintersecting_families);
+	genera_arreglo_de_thrackles(nthrackles);
 
 	xmin = xmax = puntos_otype[0].x;
 	ymin = ymax = puntos_otype[0].y;
@@ -202,27 +203,27 @@ void keyboard(unsigned char key, int x, int y){
 	if(key == 13){
 		otype = atoi(buffer);
 		if(otype > 0 && otype <= otypes){
-			kint_fam = 1;
+			kthrackle = 1;
 			procesa_puntos();
 			strcpy(textos2, "Thrackle ");
-			sprintf(buffer2, "%d", kint_fam);
+			sprintf(buffer2, "%d", kthrackle);
 			strcat(textos2, buffer2);
 			strcat(textos2, "/");
-			sprintf(buffer2, "%d", nintersecting_families);
+			sprintf(buffer2, "%d", nthrackles);
 			strcat(textos2, buffer2);
 		}
 		strcpy(buffer, "");
 	}else if(key == 32){
 		int k;
 		k = atoi(buffer);
-		if(k > 0 && k <= nintersecting_families){
-			kint_fam = k;
+		if(k > 0 && k <= nthrackles){
+			kthrackle = k;
 			procesa_puntos();
 			strcpy(textos2, "Thrackle ");
-			sprintf(buffer2, "%d", kint_fam);
+			sprintf(buffer2, "%d", kthrackle);
 			strcat(textos2, buffer2);
 			strcat(textos2, "/");
-			sprintf(buffer2, "%d", nintersecting_families);
+			sprintf(buffer2, "%d", nthrackles);
 			strcat(textos2, buffer2);			
 		}
 
@@ -230,8 +231,36 @@ void keyboard(unsigned char key, int x, int y){
 		sprintf(buffer2, "%d", otype);
 		strcat(textos, buffer2);
 		strcpy(buffer, "");
-	}
+	}else if(key == 'p'){
+		FILE *fp;
+ 	 	int state = GL2PS_OVERFLOW, buffsize = 0;
+ 	 	char nombre_archivo[50] = "n", ruta[50] = "pdfs/";
+ 	 	char temp_char[15];
 
+ 	 	sprintf(temp_char, "%d", n);
+ 	 	strcat(nombre_archivo, temp_char);
+ 	 	strcat(nombre_archivo, "_otype");
+ 	 	sprintf(temp_char, "%d", otype);
+ 	 	strcat(nombre_archivo, temp_char);
+ 	 	strcat(nombre_archivo, "_thrackle");
+ 	 	sprintf(temp_char, "%d", kthrackle);
+ 	 	strcat(nombre_archivo, temp_char);
+ 	 	strcat(nombre_archivo, ".pdf");
+ 	 	strcat(ruta, nombre_archivo);
+
+		fp = fopen(ruta, "wb");
+    	printf("Imprimiendo a archivo %s\n", ruta);
+    	while(state == GL2PS_OVERFLOW){
+      		buffsize += 1024*1024;
+      		gl2psBeginPage(" ", " ", NULL, GL2PS_PDF, GL2PS_SIMPLE_SORT,
+                     GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT,
+                     GL_RGBA, 0, NULL, 0, 0, 0, buffsize, fp, NULL);
+      		dibuja();
+      		state = gl2psEndPage();
+    	}
+    	fclose(fp);
+    	printf("PDF generado\n");
+	}
 	int len = strlen(buffer);
 	// Verifica que el string de buffer no esté lleno y que esté ingresando solo numeros
 	if(len < 20 && (key >=48 && key <=57)){
@@ -239,8 +268,7 @@ void keyboard(unsigned char key, int x, int y){
 		buffer[len+1] = '\0';
 		strcpy(textos, "Otype: ");
 		strcat(textos, buffer);
-	}	
-	
+	}
 	glutPostRedisplay();
 }
 
@@ -248,38 +276,38 @@ void special(int key, int x, int y){
 	if(key == GLUT_KEY_LEFT){
 		if(otype > 1){
 			otype--;
-			kint_fam = 1;
+			kthrackle = 1;
 			procesa_puntos();
 		}
 	}else if(key == GLUT_KEY_RIGHT){
 		if(otype < otypes){
 			otype++;
-			kint_fam = 1;
+			kthrackle = 1;
 			procesa_puntos();
 		}
 	}else if(key == GLUT_KEY_DOWN){
-		if(kint_fam < nintersecting_families){
-			kint_fam++;
+		if(kthrackle < nthrackles){
+			kthrackle++;
 			procesa_puntos();
 
 		}
 	}else if(key == GLUT_KEY_UP){
-		if(kint_fam > 1){
-			kint_fam--;
+		if(kthrackle > 1){
+			kthrackle--;
 			procesa_puntos();			
 		}
 	}else if(key == GLUT_KEY_END){
 		otype = otypes;
-		kint_fam = 1;
+		kthrackle = 1;
 		procesa_puntos();
 	}else if(key == GLUT_KEY_HOME){
 		otype = 1;
-		kint_fam = 1;
+		kthrackle = 1;
 		procesa_puntos();		
 	}else if(key == GLUT_KEY_PAGE_DOWN){
-		kint_fam = nintersecting_families;
+		kthrackle = nthrackles;
 	}else if(key == GLUT_KEY_PAGE_UP){
-		kint_fam = 1;
+		kthrackle = 1;
 	}
 
 	// Actualizacion de los textos
@@ -287,15 +315,14 @@ void special(int key, int x, int y){
 	sprintf(buffer2, "%d", otype);
 	strcat(textos, buffer2);	
 	strcpy(textos2, "Thrackle ");
-	sprintf(buffer2, "%d", kint_fam);
+	sprintf(buffer2, "%d", kthrackle);
 	strcat(textos2, buffer2);	
 	strcat(textos2, "/");
-	sprintf(buffer2, "%d", nintersecting_families);
+	sprintf(buffer2, "%d", nthrackles);
 	strcat(textos2, buffer2);
 
 	glutPostRedisplay();
 }
-
 
 void inicializa_opengl(){
 	glutInitDisplayMode (GLUT_RGBA|GLUT_DOUBLE);
@@ -350,7 +377,6 @@ int main(int argc, char *argv[]){
 		fread(&a, bytes, 1, file);
 		fread(&b, bytes, 1, file);
 
-		//printf("Leidos %d %d\n", a, b); getchar();
 		puntos[i].etiqueta = etiqueta;
 		puntos[i].x = a;
 		puntos[i].y = b;
@@ -363,7 +389,7 @@ int main(int argc, char *argv[]){
 
 	procesa_puntos();
 	strcat(textos2, "/");
-	sprintf(buffer2, "%d", nintersecting_families);
+	sprintf(buffer2, "%d", nthrackles);
 	strcat(textos2, buffer2);
 
 	glutInit(&argc, argv);
