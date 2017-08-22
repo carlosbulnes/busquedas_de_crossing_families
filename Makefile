@@ -8,10 +8,10 @@ thrackle:
 	clear && gcc thrackles/thrackles.c -o prog -lcurl -O2 && ./prog
 
 dotypes:
-	g++ dibuja.cpp gl2ps.c -lglut -lGL -lGLU -lcurl -lm -o dibuja && ./dibuja
+	g++ opengl/dibuja.cpp opengl/gl2ps.c -lglut -lGL -lGLU -lcurl -lm -o dibuja && ./dibuja
 
 dthrackles:
-	g++ thrackles/dibuja_thrackles.cpp gl2ps.c -lglut -lGL -lGLU -lcurl -lm -o dibuja && ./dibuja
+	g++ opengl/dibuja_thrackles.cpp opengl/gl2ps.c -lglut -lGL -lGLU -lcurl -lm -o dibuja && ./dibuja
 
 clean:
 	rm -f crossing_families/logk1-3-*
