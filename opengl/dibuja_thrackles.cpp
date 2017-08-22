@@ -112,7 +112,7 @@ int numero_thrackles(){
 
 
 void genera_arreglo_de_thrackles(int nthrackles){
-	FILE *log = fopen("thrackles/log/thrakle_n", "r");
+	FILE *log = fopen("opengl/datos_thrackles/thrakle_n", "r");
 	thrackles = (char **)malloc(sizeof(char*)*nthrackles);
 
 	for(int i = 0; i < nthrackles; i++){
@@ -150,7 +150,7 @@ void procesa_puntos(){
 		}	
 	}
 
-	log = fopen("thrackles/log/thrakle_n", "w");
+	log = fopen("opengl/datos_thrackles/thrakle_n", "w");
 	
 	switch(n){
 		case 6: n6(segmentos, nsegmentos, log); break;
