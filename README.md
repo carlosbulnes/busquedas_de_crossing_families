@@ -21,11 +21,11 @@ make thrackle
 respectivamente.
 
 
-Por último se incluen dos programas en OpenGl 
+Por último se incluyen dos programas en OpenGl 
 
-opengl/dibuja.cpp , para visualizar los tipos de orden de 8, 9 y 10 puntos
+opengl/dibuja.cpp : para visualizar los tipos de orden de 8, 9 y 10 puntos
 
-opengl/dibuja_thrackles.cpp , para vizualizar los thrackles para cada tipos de orden de 8, 9 y 10 puntos
+opengl/dibuja_thrackles.cpp : para vizualizar los thrackles para cada tipos de orden de 8, 9 y 10 puntos
 
 los cuales se compilan y ejecutan con
 
@@ -36,5 +36,5 @@ make dthrackles
 
 *** Dependencias ***
 
-Para ejecutar los programas en openGL es necesario intalar la biblioteca freeglut
+Para ejecutar los programas en openGL es necesario instalar la biblioteca freeglut
 
