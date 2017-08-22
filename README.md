@@ -5,7 +5,9 @@ En este repositorio se encuentran todos los programas desarrollados en el trabaj
 Los programas implementados para la realización de dicha tesis se encuentran en:
 
 crossing_families/2k2.c
+
 crossing_families/k13.c
+
 thrackles/thrackles.c
 
 Dichos programas pueden ser ejecutados mediante el comando 
