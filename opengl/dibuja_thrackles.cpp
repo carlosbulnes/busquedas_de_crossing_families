@@ -47,23 +47,9 @@ void dibuja() {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glColor3f(0.0, 0.0, 1.0);
-	glPointSize(5);
-	gl2psPointSize(5);
-	glBegin(GL_POINTS);
-	for(i = 0; i < n; i++){
-		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
-	}
-	glEnd();
-
-	glColor3f(1.0, 0.0, 0.0);
-	for(i = 0; i < n; i++){
-		glRasterPos2f(puntos_otype[i].x, puntos_otype[i].y);
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, puntos_otype[i].etiqueta);
-	}
-
 	glColor3f(.5,.5,.5);
 	glLineWidth(.2);
+	gl2psLineWidth(1);
 	if(nthrackles > 0){
 		for(i = 0; i < n*2; i+=2){
 			glBegin(GL_LINE_STRIP);
@@ -82,8 +68,24 @@ void dibuja() {
 			}
 		}
 	}
+
+	glColor3f(0.0, 0.0, 1.0);
+	//glColor3f(.2,.2,.2);
+	glPointSize(5);
+	gl2psPointSize(10);
+	glBegin(GL_POINTS);
+	for(i = 0; i < n; i++){
+		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
+	}
+	glEnd();
+
+	glColor3f(1.0, 0.0, 0.0);
+	for(i = 0; i < n; i++){
+		glRasterPos2f(puntos_otype[i].x, puntos_otype[i].y);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, puntos_otype[i].etiqueta);
+	}
 	
-	glColor3f(.5,.5,.5);
+	glColor3f(0.0,0.0,0.0);
 	print(ancho-200,alto-50,textos);
 	print(ancho-200,alto-80,textos2);
 	
@@ -153,7 +155,6 @@ void procesa_puntos(){
 	log = fopen("opengl/datos_thrackles/thrakle_n", "w");
 	
 	switch(n){
-		case 6: n6(segmentos, nsegmentos, log); break;
 		case 8: n8(segmentos, nsegmentos, log); break;
 		case 9: n9(segmentos, nsegmentos, log); break;
 		case 10: n10(segmentos, nsegmentos, log); break;
@@ -326,7 +327,7 @@ void inicializa_opengl(){
 	glutInitDisplayMode (GLUT_RGBA|GLUT_DOUBLE);
 	glutInitWindowSize (ancho,alto);
 	glutInitWindowPosition (100,100);
-	glutCreateWindow ("Order Types");
+	glutCreateWindow ("Thrackles");
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc (special);	
 	glutDisplayFunc (dibuja);

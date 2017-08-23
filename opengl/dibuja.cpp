@@ -22,7 +22,7 @@ Punto *puntos;
 Puntof *puntos_otype;
 int n, ancho = 1000, alto = 800;
 char buffer[20]="", textos[50] = "1", buffer2[20];
-int otype = 1, otypes;
+int otype = 1, otypes, enable_labels = 1;
 
 
 void reshape_cb (int w, int h) {
@@ -49,26 +49,15 @@ void print(int x, int y, char *string){
 void dibuja() {
 	int i;
 	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable( GL_LINE_SMOOTH );
+	glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 
+	glColor3f(0.0,0.0,0.0);
 	print(ancho-130,alto-60,textos);
 
-	glColor3f(0.0, 0.0, 1.0);
-	glPointSize(5);
-	gl2psPointSize(5);
-	glBegin(GL_POINTS);
-	for(i = 0; i < n; i++){
-		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
-	}
-	glEnd();
-
-	glColor3f(1.0, 0.0, 0.0);
-	for(i = 0; i < n; i++){
-		print(puntos_otype[i].x, puntos_otype[i].y, puntos_otype[i].etiqueta);
-	}
-	
-	glColor3f(.5,.5,.5);
+	glColor3f(.2,.2,.2);
 	glLineWidth(.2);
-	gl2psLineWidth(.2);
+	gl2psLineWidth(1);
 	for(i = 0; i < n; i++){
 		for(int j = i+1; j < n; j++){
 			glBegin(GL_LINE_STRIP);
@@ -77,6 +66,24 @@ void dibuja() {
 			glEnd();
 		}
 	}
+
+	//glColor3f(0.0, 0.0, 1.0);
+	glColor3f(.2,.2,.2);
+	glPointSize(5);
+	gl2psPointSize(10);
+	glBegin(GL_POINTS);
+	for(i = 0; i < n; i++){
+		glVertex2f(puntos_otype[i].x, puntos_otype[i].y);
+	}
+	glEnd();
+	
+	if(enable_labels){
+		glColor3f(1.0, 0.0, 0.0);
+		for(i = 0; i < n; i++){
+			print(puntos_otype[i].x, puntos_otype[i].y, puntos_otype[i].etiqueta);
+		}
+	}
+
 	glutSwapBuffers();
 }
 
@@ -110,10 +117,6 @@ void procesa_puntos(){
 	ancho_otype = (xmax-xmin);
 	alto_otype = (ymax-ymin);
 
-	//printf("%d %d\n", ancho_otype, alto_otype);
-	//for(i = 0; i < n; i++)
-	//	printf("%c = (%.2f, %.2f)\n", puntos_otype[i].etiqueta, puntos_otype[i].x, puntos_otype[i].y);
-
 	if(alto_otype > ancho_otype){
 		for(i = 0; i < n; i++){
 			puntos_otype[i].x = (((puntos_otype[i].x - xmin) * (alto-30))/alto_otype) + 10;
@@ -125,11 +128,6 @@ void procesa_puntos(){
 			puntos_otype[i].y = (((puntos_otype[i].y - ymin) * (alto-30))/ancho_otype) + 10;
 		}		
 	}
-
-	//for(i = 0; i < n; i++)
-	//	printf("%c = (%.2f, %.2f)\n", puntos_otype[i].etiqueta, puntos_otype[i].x, puntos_otype[i].y);
-
-	//glutPostRedisplay();
 }
 
 void keyboard(unsigned char key, int x, int y){
@@ -143,6 +141,7 @@ void keyboard(unsigned char key, int x, int y){
 		strcpy(buffer, "");
 	}else if(key == 'p'){
 		FILE *fp;
+		enable_labels = 0;
  	 	int state = GL2PS_OVERFLOW, buffsize = 0;
  	 	char nombre_archivo[50] = "n", ruta[50] = "pdfs/";
  	 	char temp_char[15];
@@ -165,6 +164,7 @@ void keyboard(unsigned char key, int x, int y){
       		dibuja();
       		state = gl2psEndPage();
     	}
+    	enable_labels = 1;
     	fclose(fp);
     	printf("PDF generado\n");
 	}
@@ -220,7 +220,9 @@ void inicializa_opengl(){
 	glutInitDisplayMode (GLUT_RGBA|GLUT_DOUBLE);
 	glutInitWindowSize (ancho,alto);
 	glutInitWindowPosition (100,100);
-	glutCreateWindow ("Order Types");
+	glutCreateWindow ("Tipos de orden");
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc (special);	
 	glutDisplayFunc (dibuja);
