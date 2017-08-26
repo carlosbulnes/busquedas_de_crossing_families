@@ -281,6 +281,8 @@ int main(int argc, char *argv[]){
 	procesa_puntos();
 
 	glutInit(&argc, argv);
+	alto = glutGet(GLUT_SCREEN_HEIGHT) * .8;
+	ancho = glutGet(GLUT_SCREEN_WIDTH) * .6;
 	inicializa_opengl();
 	dibuja();
 

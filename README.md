@@ -36,5 +36,15 @@ make dthrackles
 
 *** Dependencias ***
 
-Para ejecutar los programas en openGL es necesario instalar la biblioteca freeglut
+Para ejecutar los programas en openGL es necesario instalar la biblioteca freeglut y curl
+
+En Ubuntu:
+
+sudo apt-get install libcurl4-openssl-dev
+sudo apt-get install freeglut3-dev
+
+En Arch:
+
+sudo pacman -S freeglut
+sudo pacman -S curl
 
