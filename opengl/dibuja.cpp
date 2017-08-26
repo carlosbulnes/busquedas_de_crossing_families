@@ -48,6 +48,8 @@ void print(int x, int y, char *string){
 
 void dibuja() {
 	int i;
+	//alto = glutGet(GLUT_WINDOW_HEIGHT);
+	//ancho = glutGet(GLUT_WINDOW_WIDTH);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable( GL_LINE_SMOOTH );
 	glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );

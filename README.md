@@ -41,10 +41,12 @@ Para ejecutar los programas en openGL es necesario instalar la biblioteca freegl
 En Ubuntu:
 
 sudo apt-get install libcurl4-openssl-dev
+
 sudo apt-get install freeglut3-dev
 
 En Arch:
 
 sudo pacman -S freeglut
+
 sudo pacman -S curl
 

@@ -392,6 +392,8 @@ int main(int argc, char *argv[]){
 	strcat(textos2, buffer2);
 
 	glutInit(&argc, argv);
+	alto = glutGet(GLUT_SCREEN_HEIGHT) * .8;
+	ancho = glutGet(GLUT_SCREEN_WIDTH) * .6;
 	inicializa_opengl();
 	dibuja();
 
